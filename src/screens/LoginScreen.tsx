@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
+  Image,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -35,9 +36,11 @@ export default function LoginScreen({ navigation }: Props) {
       >
         {/* Header */}
         <View style={styles.header}>
-          <View style={styles.logoSmall}>
-            <Text style={styles.logoEmoji}>🥛</Text>
-          </View>
+          <Image
+            source={require('../../assets/images/DairifyGBLogo.jpeg')}
+            style={styles.logoSmall}
+            resizeMode="contain"
+          />
           <Text style={styles.appName}>DairifyGB</Text>
           <Text style={styles.tagline}>From GB Farms to Your Family.</Text>
         </View>
@@ -126,13 +129,9 @@ const styles = StyleSheet.create({
   logoSmall: {
     width: 72,
     height: 72,
-    borderRadius: 36,
-    backgroundColor: Colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderRadius: 16,
     marginBottom: 4,
   },
-  logoEmoji: { fontSize: 36 },
   appName: {
     fontSize: Spacing.font.xxl,
     fontWeight: '900',

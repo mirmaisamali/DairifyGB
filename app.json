@@ -4,17 +4,20 @@
     "slug": "dairify-gb",
     "version": "1.0.0",
     "orientation": "portrait",
+    "icon": "./assets/images/DairifyGBLogo.jpeg",
     "userInterfaceStyle": "light",
     "splash": {
+      "image": "./assets/images/DairifyGBLogo.jpeg",
       "resizeMode": "contain",
-      "backgroundColor": "#F0FDF4"
+      "backgroundColor": "#B8DAF2"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#F0FDF4"
+        "foregroundImage": "./assets/images/DairifyGBLogo.jpeg",
+        "backgroundColor": "#B8DAF2"
       }
     },
     "web": {
