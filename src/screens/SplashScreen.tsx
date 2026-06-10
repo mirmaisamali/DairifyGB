@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import Colors from '../constants/colors';
@@ -19,11 +19,12 @@ export default function SplashScreen({ navigation }: Props) {
 
   return (
     <View style={styles.container}>
-      {/* Logo placeholder */}
       <View style={styles.logoWrapper}>
-        <View style={styles.logo}>
-          <Text style={styles.logoEmoji}>🥛</Text>
-        </View>
+        <Image
+          source={require('../../assets/images/DairifyGBLogo.jpeg')}
+          style={styles.logo}
+          resizeMode="contain"
+        />
         <View style={styles.logoRing} />
       </View>
 
@@ -64,10 +65,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 100,
     height: 100,
-    borderRadius: 50,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderRadius: 20,
     zIndex: 1,
   },
   logoRing: {
@@ -78,7 +76,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'rgba(255,255,255,0.3)',
   },
-  logoEmoji: { fontSize: 56 },
   appName: {
     fontSize: 38,
     fontWeight: '900',
