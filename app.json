@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "DairifyGB",
+    "slug": "dairify-gb",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#F0FDF4"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#F0FDF4"
+      }
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}

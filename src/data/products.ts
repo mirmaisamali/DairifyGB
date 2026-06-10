@@ -1,0 +1,141 @@
+import { Product, SubscriptionOption } from '../types';
+
+export const PRODUCTS: Product[] = [
+  // ── Milk ─────────────────────────────────────────────────────────────────
+  {
+    id: 'milk-001',
+    name: 'Fresh Full Cream Milk',
+    category: 'Milk',
+    price: 180,
+    unit: '1 Litre',
+    emoji: '🥛',
+    description: 'Pure farm-fresh full-cream milk from Gilgit valleys.',
+  },
+  {
+    id: 'milk-002',
+    name: 'Skimmed Milk',
+    category: 'Milk',
+    price: 160,
+    unit: '1 Litre',
+    emoji: '🥛',
+    description: 'Low-fat skimmed milk, perfect for a healthy lifestyle.',
+  },
+  {
+    id: 'milk-003',
+    name: 'Buffalo Milk',
+    category: 'Milk',
+    price: 220,
+    unit: '1 Litre',
+    emoji: '🐃',
+    description: 'Rich and creamy buffalo milk with high fat content.',
+  },
+  {
+    id: 'milk-004',
+    name: 'Boiled & Packed Milk',
+    category: 'Milk',
+    price: 200,
+    unit: '500 ml',
+    emoji: '🥛',
+    description: 'Pasteurized and packed for maximum freshness.',
+  },
+
+  // ── Yogurt & Lassi ───────────────────────────────────────────────────────
+  {
+    id: 'yogurt-001',
+    name: 'Natural Dahi (Yogurt)',
+    category: 'Yogurt & Lassi',
+    price: 150,
+    unit: '500g',
+    emoji: '🫙',
+    description: 'Thick, creamy dahi set overnight from pure GB milk.',
+  },
+  {
+    id: 'yogurt-002',
+    name: 'Sweet Lassi',
+    category: 'Yogurt & Lassi',
+    price: 120,
+    unit: '500 ml',
+    emoji: '🥤',
+    description: 'Chilled sweet lassi made from fresh farm yogurt.',
+  },
+  {
+    id: 'yogurt-003',
+    name: 'Salted Lassi',
+    category: 'Yogurt & Lassi',
+    price: 120,
+    unit: '500 ml',
+    emoji: '🥤',
+    description: 'Traditional salted lassi – refreshing and nutritious.',
+  },
+  {
+    id: 'yogurt-004',
+    name: 'Mango Lassi',
+    category: 'Yogurt & Lassi',
+    price: 140,
+    unit: '500 ml',
+    emoji: '🥭',
+    description: 'Seasonal mango lassi blended with farm-fresh yogurt.',
+  },
+
+  // ── Butter & Ghee ────────────────────────────────────────────────────────
+  {
+    id: 'butter-001',
+    name: 'Pure Cow Butter',
+    category: 'Butter & Ghee',
+    price: 350,
+    unit: '250g',
+    emoji: '🧈',
+    description: 'Hand-churned pure cow butter from local GB farms.',
+  },
+  {
+    id: 'butter-002',
+    name: 'Desi Ghee',
+    category: 'Butter & Ghee',
+    price: 1200,
+    unit: '1 kg',
+    emoji: '🫙',
+    description: 'Authentic desi ghee clarified from pure farm butter.',
+  },
+  {
+    id: 'butter-003',
+    name: 'Buffalo Butter',
+    category: 'Butter & Ghee',
+    price: 400,
+    unit: '250g',
+    emoji: '🧈',
+    description: 'Rich buffalo butter – ideal for bread and cooking.',
+  },
+  {
+    id: 'butter-004',
+    name: 'Organic Ghee',
+    category: 'Butter & Ghee',
+    price: 1500,
+    unit: '1 kg',
+    emoji: '✨',
+    description: 'Premium organic ghee, slow-cooked to golden perfection.',
+  },
+];
+
+export const SUBSCRIPTION_OPTIONS: SubscriptionOption[] = [
+  {
+    id: 'Daily',
+    label: 'Daily Delivery',
+    description: 'Fresh dairy at your door every single morning.',
+    emoji: '🌅',
+    savings: 'Best Value',
+  },
+  {
+    id: 'Alternate Days',
+    label: 'Alternate Days',
+    description: 'Delivered every other day – great for small families.',
+    emoji: '📅',
+    savings: 'Popular',
+  },
+  {
+    id: 'Weekly',
+    label: 'Weekly Delivery',
+    description: 'One bulk delivery per week for your convenience.',
+    emoji: '📦',
+    savings: 'Flexible',
+  },
+];
