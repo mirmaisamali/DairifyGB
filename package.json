@@ -9,10 +9,11 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
-    "@react-navigation/bottom-tabs": "^6.5.20",
-    "expo": "^56.0.9",
+    "expo": "~56.0.11",
+    "expo-splash-screen": "~56.0.10",
     "expo-status-bar": "~56.0.4",
     "react": "19.2.3",
     "react-native": "0.85.3",
@@ -23,7 +24,7 @@
     "@babel/core": "^7.24.0",
     "@types/react": "~19.2.17",
     "babel-preset-expo": "~56.0.14",
-    "typescript": "^5.3.3"
+    "typescript": "~6.0.3"
   },
   "private": true
 }
