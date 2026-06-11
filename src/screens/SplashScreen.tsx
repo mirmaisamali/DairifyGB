@@ -21,7 +21,7 @@ export default function SplashScreen({ navigation }: Props) {
     <View style={styles.container}>
       <View style={styles.logoWrapper}>
         <Image
-          source={require('../../assets/images/DairifyGBLogo.jpeg')}
+          source={require('../../assets/images/DairifyGBLogo.png')}
           style={styles.logo}
           resizeMode="contain"
         />
@@ -63,16 +63,16 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
   },
   logo: {
-    width: 100,
-    height: 100,
-    borderRadius: 20,
+    width: 115,
+    height: 115,
+    borderRadius: '100%',
     zIndex: 1,
   },
   logoRing: {
     position: 'absolute',
     width: 120,
     height: 120,
-    borderRadius: 60,
+    borderRadius: '100%',
     borderWidth: 2,
     borderColor: 'rgba(255,255,255,0.3)',
   },

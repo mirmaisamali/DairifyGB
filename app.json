@@ -4,24 +4,39 @@
     "slug": "dairify-gb",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/DairifyGBLogo.jpeg",
+    "icon": "./assets/images/DairifyGBLogo.png",
+    "scheme": "dairifygb",
     "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/images/DairifyGBLogo.jpeg",
-      "resizeMode": "contain",
-      "backgroundColor": "#B8DAF2"
-    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dairifygb.app"
     },
     "android": {
+      "package": "com.dairifygb.app",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/DairifyGBLogo.jpeg",
+        "foregroundImage": "./assets/images/DairifyGBLogo.png",
         "backgroundColor": "#B8DAF2"
       }
     },
     "web": {
-      "bundler": "metro"
+      "bundler": "metro",
+      "favicon": "./assets/images/DairifyGBLogo.png"
+    },
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#B8DAF2",
+          "image": "./assets/images/DairifyGBLogo.png",
+          "imageWidth": 200,
+          "resizeMode": "contain"
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "f70676e7-6ded-4474-9f12-9068f48adfcb"
+      }
     }
   }
 }

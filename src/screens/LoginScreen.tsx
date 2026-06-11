@@ -37,7 +37,7 @@ export default function LoginScreen({ navigation }: Props) {
         {/* Header */}
         <View style={styles.header}>
           <Image
-            source={require('../../assets/images/DairifyGBLogo.jpeg')}
+            source={require('../../assets/images/DairifyGBLogo.png')}
             style={styles.logoSmall}
             resizeMode="contain"
           />
