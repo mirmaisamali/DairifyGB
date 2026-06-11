@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
     gap: Spacing.sm,
+    marginBottom: Spacing.sm,
   },
   tab: {
     flexDirection: 'row',
@@ -66,6 +67,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: Colors.border,
     position: 'relative',
+    height: 40,
   },
   tabActive: {
     backgroundColor: Colors.primaryLight,
