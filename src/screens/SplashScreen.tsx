@@ -65,14 +65,14 @@ const styles = StyleSheet.create({
   logo: {
     width: 115,
     height: 115,
-    borderRadius: '100%',
+    borderRadius: Spacing.radius.full,
     zIndex: 1,
   },
   logoRing: {
     position: 'absolute',
     width: 120,
     height: 120,
-    borderRadius: '100%',
+    borderRadius: Spacing.radius.full,
     borderWidth: 2,
     borderColor: 'rgba(255,255,255,0.3)',
   },
