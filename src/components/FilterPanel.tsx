@@ -23,7 +23,7 @@ interface FilterPanelProps {
   onReset: () => void;
 }
 
-export default function FilterPanel({
+const FilterPanel = ({
   visible,
   onClose,
   minPrice,
@@ -31,7 +31,7 @@ export default function FilterPanel({
   priceBounds,
   onApply,
   onReset,
-}: FilterPanelProps) {
+}: FilterPanelProps) => {
   const [minText, setMinText] = useState(
     minPrice !== undefined ? String(minPrice) : "",
   );
@@ -128,7 +128,9 @@ export default function FilterPanel({
       </KeyboardAvoidingView>
     </Modal>
   );
-}
+};
+
+export default FilterPanel;
 
 const styles = StyleSheet.create({
   overlay: {

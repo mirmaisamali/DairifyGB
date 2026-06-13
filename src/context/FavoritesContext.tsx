@@ -1,4 +1,4 @@
-import React, {
+import {
   createContext,
   useContext,
   useState,
@@ -16,7 +16,7 @@ interface FavoritesContextValue {
 
 const FavoritesContext = createContext<FavoritesContextValue | null>(null);
 
-export function FavoritesProvider({ children }: { children: ReactNode }) {
+const FavoritesProvider = ({ children }: { children: ReactNode }) => {
   const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -50,7 +50,8 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
       {children}
     </FavoritesContext.Provider>
   );
-}
+};
+export default FavoritesProvider;
 
 export function useFavorites(): FavoritesContextValue {
   const ctx = useContext(FavoritesContext);

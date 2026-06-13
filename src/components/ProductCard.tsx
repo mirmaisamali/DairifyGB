@@ -9,7 +9,7 @@ interface ProductCardProps {
   product: Product;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+const ProductCard = ({ product }: ProductCardProps) => {
   const { items, addToCart, updateQuantity } = useCart();
   const { isFavorite, toggleFavorite } = useFavorites();
   const cartItem = items.find((i) => i.product.id === product.id);
@@ -76,7 +76,9 @@ export default function ProductCard({ product }: ProductCardProps) {
       </View>
     </View>
   );
-}
+};
+
+export default ProductCard;
 
 const styles = StyleSheet.create({
   card: {

@@ -13,12 +13,13 @@ type Props = {
   route: RouteProp<RootStackParamList, "OrderSuccess">;
 };
 
-export default function OrderSuccessScreen({ navigation, route }: Props) {
+const OrderSuccessScreen = ({ navigation, route }: Props) => {
   const { orderId } = route.params;
   const { orders } = useOrders();
   const order = orders.find((o) => o.id === orderId);
   const paymentLabel =
     order?.paymentMethod === "card" ? "Card / Wallet" : "Cash on Delivery";
+
   return (
     <SafeAreaView style={styles.safe} edges={["top", "bottom"]}>
       <View style={styles.container}>
@@ -84,7 +85,8 @@ export default function OrderSuccessScreen({ navigation, route }: Props) {
       </View>
     </SafeAreaView>
   );
-}
+};
+export default OrderSuccessScreen;
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.background },

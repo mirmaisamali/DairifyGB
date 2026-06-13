@@ -46,7 +46,7 @@ const STEPS = [
   },
 ];
 
-export default function OrderTrackingScreen({ navigation, route }: Props) {
+const OrderTrackingScreen = ({ navigation, route }: Props) => {
   const orderId = route.params?.orderId;
   const { orders, updateOrderStatus } = useOrders();
   const order = orders.find((o) => o.id === orderId);
@@ -238,7 +238,9 @@ export default function OrderTrackingScreen({ navigation, route }: Props) {
       </ScrollView>
     </SafeAreaView>
   );
-}
+};
+
+export default OrderTrackingScreen;
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.background },

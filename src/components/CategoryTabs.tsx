@@ -20,10 +20,7 @@ interface CategoryTabsProps {
   onSelect: (cat: Category) => void;
 }
 
-export default function CategoryTabs({
-  selected,
-  onSelect,
-}: CategoryTabsProps) {
+const CategoryTabs = ({ selected, onSelect }: CategoryTabsProps) => {
   return (
     <ScrollView
       horizontal
@@ -49,7 +46,9 @@ export default function CategoryTabs({
       })}
     </ScrollView>
   );
-}
+};
+
+export default CategoryTabs;
 
 const styles = StyleSheet.create({
   container: {

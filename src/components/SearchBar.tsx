@@ -16,13 +16,13 @@ interface SearchBarProps {
   filterActive?: boolean;
 }
 
-export default function SearchBar({
+const SearchBar = ({
   value,
   onChangeText,
   placeholder = "Search products...",
   onFilterPress,
   filterActive = false,
-}: SearchBarProps) {
+}: SearchBarProps) => {
   return (
     <View style={styles.row}>
       <View style={styles.searchWrapper}>
@@ -56,7 +56,8 @@ export default function SearchBar({
       )}
     </View>
   );
-}
+};
+export default SearchBar;
 
 const styles = StyleSheet.create({
   row: {

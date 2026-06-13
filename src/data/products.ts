@@ -1,8 +1,6 @@
 import { Product, SubscriptionOption } from "../types";
 import productsData from "./products.json";
 
-// Re-exported for backward compatibility with existing imports.
-// New code should prefer `services/productService.ts`.
 export const PRODUCTS: Product[] = productsData.products as Product[];
 
 export const SUBSCRIPTION_OPTIONS: SubscriptionOption[] = [

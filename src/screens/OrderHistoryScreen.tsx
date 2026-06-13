@@ -1,85 +1,20 @@
 import { useState, useCallback } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  RefreshControl,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, FlatList, RefreshControl } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useOrders } from "../context/OrdersContext";
 import EmptyState from "../components/EmptyState";
-import { SkeletonBox } from "../components/Skeleton";
 import Colors from "../constants/colors";
 import Spacing from "../constants/spacing";
-import { Order, RootStackParamList } from "../types";
-import { formatOrderDate, formatPrice } from "../utils/format";
+import { RootStackParamList } from "../types";
+import SkeletonBox from "../components/SkeletonBox";
+import OrderCard from "../components/OrderCard";
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList>;
 };
 
-function StatusBadge({ status }: { status: Order["status"] }) {
-  const isDelivered = status === "Delivered";
-  return (
-    <View
-      style={[
-        styles.statusBadge,
-        isDelivered ? styles.statusDelivered : styles.statusPending,
-      ]}
-    >
-      <Text
-        style={[
-          styles.statusText,
-          isDelivered ? styles.statusTextDelivered : styles.statusTextPending,
-        ]}
-      >
-        {isDelivered ? "📦 Delivered" : "⏳ Pending"}
-      </Text>
-    </View>
-  );
-}
-
-function OrderCard({ order, onPress }: { order: Order; onPress: () => void }) {
-  const itemCount = order.items.reduce((sum, i) => sum + i.quantity, 0);
-
-  return (
-    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.8}>
-      <View style={styles.cardHeader}>
-        <View>
-          <Text style={styles.orderId}>Order #{order.id}</Text>
-          <Text style={styles.orderDate}>{formatOrderDate(order.date)}</Text>
-        </View>
-        <StatusBadge status={order.status} />
-      </View>
-
-      <View style={styles.cardBodyColumn}>
-        {order.items.map((it) => (
-          <View key={it.productId} style={styles.itemRow}>
-            <Text style={styles.itemEmoji}>{it.emoji}</Text>
-            <Text style={styles.itemName} numberOfLines={1}>
-              {it.name}
-            </Text>
-            <Text style={styles.itemQty}>x {it.quantity}</Text>
-          </View>
-        ))}
-      </View>
-
-      <View style={styles.cardFooter}>
-        <Text style={styles.totalLabel}>Total Items</Text>
-        <Text style={styles.totalVal}>{itemCount}</Text>
-      </View>
-      <View style={styles.cardFooter}>
-        <Text style={styles.totalLabel}>Total Amount</Text>
-        <Text style={styles.totalVal}>{formatPrice(order.grandTotal)}</Text>
-      </View>
-    </TouchableOpacity>
-  );
-}
-
-export default function OrderHistoryScreen({ navigation }: Props) {
+const OrderHistoryScreen = ({ navigation }: Props) => {
   const { orders, loading } = useOrders();
   const [refreshing, setRefreshing] = useState(false);
 
@@ -99,7 +34,7 @@ export default function OrderHistoryScreen({ navigation }: Props) {
 
       {loading ? (
         <View style={styles.list}>
-          {[1, 2, 3].map((i) => (
+          {[1, 2, 3, 4].map((i) => (
             <View key={i} style={styles.card}>
               <View style={styles.cardHeader}>
                 <View style={{ gap: 6 }}>
@@ -116,12 +51,6 @@ export default function OrderHistoryScreen({ navigation }: Props) {
             </View>
           ))}
         </View>
-      ) : orders.length === 0 ? (
-        <EmptyState
-          emoji="📦"
-          title="No orders yet"
-          subtitle="Your placed orders will show up here so you can track them and re-order easily."
-        />
       ) : (
         <FlatList
           data={orders}
@@ -136,6 +65,13 @@ export default function OrderHistoryScreen({ navigation }: Props) {
           )}
           contentContainerStyle={styles.list}
           showsVerticalScrollIndicator={false}
+          ListEmptyComponent={() => (
+            <EmptyState
+              emoji="📦"
+              title="No orders yet"
+              subtitle="Your placed orders will show up here so you can track them and re-order easily."
+            />
+          )}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
@@ -147,7 +83,8 @@ export default function OrderHistoryScreen({ navigation }: Props) {
       )}
     </SafeAreaView>
   );
-}
+};
+export default OrderHistoryScreen;
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.background },
