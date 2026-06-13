@@ -4,14 +4,16 @@ export type RootStackParamList = {
   Splash: undefined;
   Login: undefined;
   Main: undefined;
-  OrderSuccess: undefined;
-  OrderTracking: undefined;
+  OrderSuccess: { orderId: string };
+  OrderTracking: { orderId?: string } | undefined;
 };
 
 export type MainTabParamList = {
   Shop: undefined;
   Subscription: undefined;
+  Favorites: undefined;
   Cart: undefined;
+  Orders: undefined;
 };
 
 // ─── Domain types ─────────────────────────────────────────────────────────────
@@ -42,4 +44,29 @@ export interface SubscriptionOption {
   description: string;
   emoji: string;
   savings: string;
+}
+
+// ─── Order types ──────────────────────────────────────────────────────────────
+
+export type OrderStatus = 'Pending' | 'Delivered';
+
+export interface OrderItem {
+  productId: string;
+  name: string;
+  unit: string;
+  emoji: string;
+  price: number;
+  quantity: number;
+}
+
+export interface Order {
+  id: string;
+  items: OrderItem[];
+  totalPrice: number;
+  deliveryFee: number;
+  grandTotal: number;
+  address: string;
+  paymentMethod: 'cod' | 'card';
+  date: string;     // ISO timestamp
+  status: OrderStatus;
 }

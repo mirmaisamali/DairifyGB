@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { Product } from '../types';
 import { useCart } from '../context/CartContext';
+import { useFavorites } from '../context/FavoritesContext';
 import Colors from '../constants/colors';
 import Spacing from '../constants/spacing';
 
@@ -16,14 +17,24 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const { items, addToCart, updateQuantity } = useCart();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const cartItem = items.find(i => i.product.id === product.id);
   const qty = cartItem?.quantity ?? 0;
+  const favorite = isFavorite(product.id);
 
   return (
     <View style={styles.card}>
       {/* Emoji placeholder (replace with <Image> later) */}
       <View style={styles.imagePlaceholder}>
         <Text style={styles.emojiLarge}>{product.emoji}</Text>
+        <TouchableOpacity
+          style={styles.favoriteBtn}
+          onPress={() => toggleFavorite(product.id)}
+          activeOpacity={0.8}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+        >
+          <Text style={styles.favoriteIcon}>{favorite ? '❤️' : '🤍'}</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.body}>
@@ -84,7 +95,20 @@ const styles = StyleSheet.create({
     height: 110,
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'relative',
   },
+  favoriteBtn: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255,255,255,0.85)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  favoriteIcon: { fontSize: 16 },
   emojiLarge: { fontSize: 52 },
   body: { padding: Spacing.sm + 4 },
   name: {

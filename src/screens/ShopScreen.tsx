@@ -1,28 +1,64 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   FlatList,
-  TouchableOpacity,
+  RefreshControl,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Category } from '../types';
-import { PRODUCTS } from '../data/products';
+import { Category, Product } from '../types';
 import CategoryTabs from '../components/CategoryTabs';
 import ProductCard from '../components/ProductCard';
+import SearchBar from '../components/SearchBar';
+import FilterPanel from '../components/FilterPanel';
+import EmptyState from '../components/EmptyState';
+import { ProductGridSkeleton } from '../components/Skeleton';
 import { useCart } from '../context/CartContext';
+import { searchProducts, getPriceBounds } from '../services/productService';
 import Colors from '../constants/colors';
 import Spacing from '../constants/spacing';
 
+const priceBounds = getPriceBounds();
+
 export default function ShopScreen() {
   const [selectedCategory, setSelectedCategory] = useState<Category>('Milk');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [minPrice, setMinPrice] = useState<number | undefined>(undefined);
+  const [maxPrice, setMaxPrice] = useState<number | undefined>(undefined);
+  const [filterVisible, setFilterVisible] = useState(false);
+
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
   const { totalItems, totalPrice } = useCart();
 
-  const filtered = useMemo(
-    () => PRODUCTS.filter(p => p.category === selectedCategory),
-    [selectedCategory]
-  );
+  const filterActive = minPrice !== undefined || maxPrice !== undefined;
+
+  const loadProducts = useCallback(async () => {
+    const results = await searchProducts({
+      search: searchQuery,
+      category: searchQuery ? 'All' : selectedCategory,
+      minPrice,
+      maxPrice,
+    });
+    setProducts(results);
+  }, [searchQuery, selectedCategory, minPrice, maxPrice]);
+
+  // Initial load + whenever filters change.
+  useEffect(() => {
+    setLoading(true);
+    loadProducts().finally(() => setLoading(false));
+  }, [loadProducts]);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await loadProducts();
+    setRefreshing(false);
+  }, [loadProducts]);
+
+  const isSearching = searchQuery.trim().length > 0;
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
@@ -40,32 +76,67 @@ export default function ShopScreen() {
       </View>
 
       {/* Hero Banner */}
-      <View style={styles.banner}>
-        <View style={styles.bannerContent}>
-          <Text style={styles.bannerBadge}>🌿 Fresh Today</Text>
-          <Text style={styles.bannerTitle}>Farm-Fresh Dairy{'\n'}Delivered Daily</Text>
-          <Text style={styles.bannerSub}>From the valleys of Gilgit-Baltistan.</Text>
+      {!isSearching && (
+        <View style={styles.banner}>
+          <View style={styles.bannerContent}>
+            <Text style={styles.bannerBadge}>🌿 Fresh Today</Text>
+            <Text style={styles.bannerTitle}>Farm-Fresh Dairy{'\n'}Delivered Daily</Text>
+            <Text style={styles.bannerSub}>From the valleys of Gilgit-Baltistan.</Text>
+          </View>
+          <Text style={styles.bannerEmoji}>🏔️</Text>
         </View>
-        <Text style={styles.bannerEmoji}>🏔️</Text>
-      </View>
+      )}
 
-      {/* Category Tabs */}
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Our Products</Text>
-        <Text style={styles.sectionCount}>{filtered.length} items</Text>
-      </View>
-      <CategoryTabs selected={selectedCategory} onSelect={setSelectedCategory} />
+      {/* Search + Filter */}
+      <SearchBar
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+        placeholder="Search milk, yogurt, ghee..."
+        onFilterPress={() => setFilterVisible(true)}
+        filterActive={filterActive}
+      />
+
+      {/* Category Tabs (hidden while searching) */}
+      {!isSearching && (
+        <>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Our Products</Text>
+            <Text style={styles.sectionCount}>{products.length} items</Text>
+          </View>
+          <CategoryTabs selected={selectedCategory} onSelect={setSelectedCategory} />
+        </>
+      )}
+
+      {isSearching && (
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Search Results</Text>
+          <Text style={styles.sectionCount}>{products.length} found</Text>
+        </View>
+      )}
 
       {/* Product Grid */}
-      <FlatList
-        data={filtered}
-        keyExtractor={item => item.id}
-        numColumns={2}
-        renderItem={({ item }) => <ProductCard product={item} />}
-        contentContainerStyle={styles.grid}
-        showsVerticalScrollIndicator={false}
-        columnWrapperStyle={styles.columnWrapper}
-      />
+      {loading ? (
+        <ProductGridSkeleton count={4} />
+      ) : products.length === 0 ? (
+        <EmptyState
+          emoji="🔍"
+          title="No products found"
+          subtitle="Try adjusting your search term or price filters."
+        />
+      ) : (
+        <FlatList
+          data={products}
+          keyExtractor={item => item.id}
+          numColumns={2}
+          renderItem={({ item }) => <ProductCard product={item} />}
+          contentContainerStyle={styles.grid}
+          showsVerticalScrollIndicator={false}
+          columnWrapperStyle={styles.columnWrapper}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />
+          }
+        />
+      )}
 
       {/* Floating Cart Bar */}
       {totalItems > 0 && (
@@ -79,6 +150,23 @@ export default function ShopScreen() {
           <Text style={styles.cartTotal}>Rs {totalPrice.toLocaleString()}</Text>
         </View>
       )}
+
+      {/* Price Filter Modal */}
+      <FilterPanel
+        visible={filterVisible}
+        onClose={() => setFilterVisible(false)}
+        minPrice={minPrice}
+        maxPrice={maxPrice}
+        priceBounds={priceBounds}
+        onApply={(min, max) => {
+          setMinPrice(min);
+          setMaxPrice(max);
+        }}
+        onReset={() => {
+          setMinPrice(undefined);
+          setMaxPrice(undefined);
+        }}
+      />
     </SafeAreaView>
   );
 }

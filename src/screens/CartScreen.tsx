@@ -10,10 +10,14 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useCart } from '../context/CartContext';
+import { useOrders } from '../context/OrdersContext';
+import { notifyOrderPlaced } from '../services/notificationService';
+import { generateOrderId } from '../utils/format';
 import Button from '../components/Button';
+import EmptyState from '../components/EmptyState';
 import Colors from '../constants/colors';
 import Spacing from '../constants/spacing';
-import { RootStackParamList } from '../types';
+import { Order, RootStackParamList } from '../types';
 
 type PaymentMethod = 'cod' | 'card';
 
@@ -22,30 +26,63 @@ type Props = {
 };
 
 export default function CartScreen({ navigation }: Props) {
-  const { items, updateQuantity, removeFromCart, totalItems, totalPrice, clearCart } = useCart();
+  const { items, loading, updateQuantity, removeFromCart, totalItems, totalPrice, clearCart } = useCart();
+  const { addOrder } = useOrders();
   const [address, setAddress] = useState('');
   const [payment, setPayment] = useState<PaymentMethod>('cod');
 
   const deliveryFee = totalPrice > 500 ? 0 : 50;
   const grandTotal = totalPrice + deliveryFee;
 
-  if (items.length === 0) {
+  if (loading) {
     return (
       <SafeAreaView style={styles.safe} edges={['top']}>
-        <View style={styles.emptyContainer}>
-          <Text style={styles.emptyEmoji}>🛒</Text>
-          <Text style={styles.emptyTitle}>Your cart is empty</Text>
-          <Text style={styles.emptySub}>
-            Add some fresh dairy products from the Shop tab.
-          </Text>
+        <View style={styles.loadingContainer}>
+          <Text style={styles.loadingEmoji}>🛒</Text>
+          <Text style={styles.loadingText}>Loading your cart...</Text>
         </View>
       </SafeAreaView>
     );
   }
 
+  if (items.length === 0) {
+    return (
+      <SafeAreaView style={styles.safe} edges={['top']}>
+        <EmptyState
+          emoji="🛒"
+          title="Your cart is empty"
+          subtitle="Add some fresh dairy products from the Shop tab."
+        />
+      </SafeAreaView>
+    );
+  }
+
   const handlePlaceOrder = () => {
+    const orderId = generateOrderId();
+
+    const order: Order = {
+      id: orderId,
+      items: items.map(i => ({
+        productId: i.product.id,
+        name: i.product.name,
+        unit: i.product.unit,
+        emoji: i.product.emoji,
+        price: i.product.price,
+        quantity: i.quantity,
+      })),
+      totalPrice,
+      deliveryFee,
+      grandTotal,
+      address: address.trim() || 'Default address, Gilgit',
+      paymentMethod: payment,
+      date: new Date().toISOString(),
+      status: 'Pending',
+    };
+
+    addOrder(order);
+    notifyOrderPlaced(orderId);
     clearCart();
-    navigation.navigate('OrderSuccess');
+    navigation.navigate('OrderSuccess', { orderId });
   };
 
   return (
@@ -320,20 +357,12 @@ const styles = StyleSheet.create({
   totalLabel: { fontSize: Spacing.font.lg, fontWeight: '900', color: Colors.textPrimary },
   totalVal: { fontSize: Spacing.font.xl, fontWeight: '900', color: Colors.primary },
   placeOrderBtn: {},
-  // Empty state
-  emptyContainer: {
+  loadingContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: Spacing.xl,
-    gap: Spacing.md,
+    gap: Spacing.sm,
   },
-  emptyEmoji: { fontSize: 72 },
-  emptyTitle: { fontSize: Spacing.font.xl, fontWeight: '800', color: Colors.textPrimary },
-  emptySub: {
-    fontSize: Spacing.font.md,
-    color: Colors.textSecondary,
-    textAlign: 'center',
-    lineHeight: 22,
-  },
+  loadingEmoji: { fontSize: 48 },
+  loadingText: { fontSize: Spacing.font.md, color: Colors.textSecondary, fontWeight: '500' },
 });
