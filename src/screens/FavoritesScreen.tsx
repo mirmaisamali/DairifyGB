@@ -5,11 +5,11 @@ import { PRODUCTS } from "../data/products";
 import { useFavorites } from "../context/FavoritesContext";
 import ProductCard from "../components/ProductCard";
 import EmptyState from "../components/EmptyState";
-import { ProductGridSkeleton } from "../components/Skeleton";
 import Colors from "../constants/colors";
 import Spacing from "../constants/spacing";
+import ProductGridSkeleton from "../components/Skeleton";
 
-export default function FavoritesScreen() {
+const FavoritesScreen = () => {
   const { favoriteIds, loading } = useFavorites();
   const [refreshing, setRefreshing] = useState(false);
 
@@ -58,7 +58,8 @@ export default function FavoritesScreen() {
       )}
     </SafeAreaView>
   );
-}
+};
+export default FavoritesScreen;
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.background },

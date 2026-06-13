@@ -11,13 +11,13 @@ interface EmptyStateProps {
   onAction?: () => void;
 }
 
-export default function EmptyState({
+const EmptyState = ({
   emoji,
   title,
   subtitle,
   actionLabel,
   onAction,
-}: EmptyStateProps) {
+}: EmptyStateProps) => {
   return (
     <View style={styles.container}>
       <Text style={styles.emoji}>{emoji}</Text>
@@ -28,14 +28,16 @@ export default function EmptyState({
       )}
     </View>
   );
-}
+};
+
+export default EmptyState;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    padding: Spacing.xl,
+    padding: Spacing.xxl,
     gap: Spacing.md,
   },
   emoji: { fontSize: 72 },

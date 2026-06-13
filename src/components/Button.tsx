@@ -20,7 +20,7 @@ interface ButtonProps {
   textStyle?: TextStyle;
 }
 
-export default function Button({
+const Button = ({
   label,
   onPress,
   variant = "primary",
@@ -29,7 +29,7 @@ export default function Button({
   disabled = false,
   style,
   textStyle,
-}: ButtonProps) {
+}: ButtonProps) => {
   const isPrimary = variant === "primary";
   const isOutline = variant === "outline";
 
@@ -68,7 +68,9 @@ export default function Button({
       )}
     </TouchableOpacity>
   );
-}
+};
+
+export default Button;
 
 const styles = StyleSheet.create({
   base: {

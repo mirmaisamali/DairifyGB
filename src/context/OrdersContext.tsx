@@ -1,4 +1,4 @@
-import React, {
+import {
   createContext,
   useContext,
   useState,
@@ -17,7 +17,7 @@ interface OrdersContextValue {
 
 const OrdersContext = createContext<OrdersContextValue | null>(null);
 
-export function OrdersProvider({ children }: { children: ReactNode }) {
+export const OrdersProvider = ({ children }: { children: ReactNode }) => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -52,7 +52,7 @@ export function OrdersProvider({ children }: { children: ReactNode }) {
       {children}
     </OrdersContext.Provider>
   );
-}
+};
 
 export function useOrders(): OrdersContextValue {
   const ctx = useContext(OrdersContext);

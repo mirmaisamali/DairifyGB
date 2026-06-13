@@ -7,11 +7,11 @@ import ProductCard from "../components/ProductCard";
 import SearchBar from "../components/SearchBar";
 import FilterPanel from "../components/FilterPanel";
 import EmptyState from "../components/EmptyState";
-import { ProductGridSkeleton } from "../components/Skeleton";
 import { useCart } from "../context/CartContext";
 import { searchProducts, getPriceBounds } from "../services/productService";
 import Colors from "../constants/colors";
 import Spacing from "../constants/spacing";
+import ProductGridSkeleton from "../components/Skeleton";
 
 const priceBounds = getPriceBounds();
 
