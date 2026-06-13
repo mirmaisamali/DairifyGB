@@ -1,8 +1,10 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { CartItem, Product } from '../types';
+import { getItem, setItem, STORAGE_KEYS } from '../services/storageService';
 
 interface CartContextValue {
   items: CartItem[];
+  loading: boolean;
   addToCart: (product: Product) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, delta: number) => void;
@@ -15,6 +17,22 @@ const CartContext = createContext<CartContextValue | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Load persisted cart on mount.
+  useEffect(() => {
+    (async () => {
+      const stored = await getItem<CartItem[]>(STORAGE_KEYS.CART, []);
+      setItems(stored);
+      setLoading(false);
+    })();
+  }, []);
+
+  // Persist cart whenever it changes (after initial load).
+  useEffect(() => {
+    if (loading) return;
+    setItem(STORAGE_KEYS.CART, items);
+  }, [items, loading]);
 
   const addToCart = (product: Product) => {
     setItems(prev => {
@@ -58,6 +76,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     <CartContext.Provider
       value={{
         items,
+        loading,
         addToCart,
         removeFromCart,
         updateQuantity,

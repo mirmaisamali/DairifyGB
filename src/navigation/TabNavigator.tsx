@@ -4,7 +4,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import ShopScreen from '../screens/ShopScreen';
 import SubscriptionScreen from '../screens/SubscriptionScreen';
+import FavoritesScreen from '../screens/FavoritesScreen';
 import CartScreen from '../screens/CartScreen';
+import OrderHistoryScreen from '../screens/OrderHistoryScreen';
 import { useCart } from '../context/CartContext';
 import Colors from '../constants/colors';
 import Spacing from '../constants/spacing';
@@ -49,6 +51,7 @@ export default function TabNavigator({ navigation }: Props) {
         headerShown: false,
         tabBarStyle: tabStyles.tabBar,
         tabBarShowLabel: false,
+        tabBarScrollEnabled: false,
       }}
     >
       <Tab.Screen
@@ -73,12 +76,33 @@ export default function TabNavigator({ navigation }: Props) {
       />
 
       <Tab.Screen
+        name="Favorites"
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <TabIcon emoji="❤️" label="Favorites" focused={focused} />
+          ),
+        }}
+        component={FavoritesScreen}
+      />
+
+      <Tab.Screen
         name="Cart"
         options={{
           tabBarIcon: ({ focused }) => <CartTabIcon focused={focused} />,
         }}
       >
         {() => <CartScreen navigation={navigation} />}
+      </Tab.Screen>
+
+      <Tab.Screen
+        name="Orders"
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <TabIcon emoji="📦" label="Orders" focused={focused} />
+          ),
+        }}
+      >
+        {() => <OrderHistoryScreen navigation={navigation} />}
       </Tab.Screen>
     </Tab.Navigator>
   );
@@ -96,18 +120,18 @@ const tabStyles = StyleSheet.create({
   iconWrapper: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: Spacing.md,
+    paddingHorizontal: Spacing.sm,
     paddingVertical: 6,
     borderRadius: Spacing.radius.md,
     gap: 2,
-    minWidth: 72,
+    minWidth: 60,
   },
   iconWrapperActive: {
     backgroundColor: Colors.primaryLight,
   },
-  iconEmoji: { fontSize: 22 },
+  iconEmoji: { fontSize: 20 },
   iconLabel: {
-    fontSize: Spacing.font.xs,
+    fontSize: 10,
     fontWeight: '600',
     color: Colors.textMuted,
   },

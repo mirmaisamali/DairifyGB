@@ -2,16 +2,23 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteProp } from '@react-navigation/native';
 import Button from '../components/Button';
 import Colors from '../constants/colors';
 import Spacing from '../constants/spacing';
 import { RootStackParamList } from '../types';
+import { useOrders } from '../context/OrdersContext';
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'OrderSuccess'>;
+  route: RouteProp<RootStackParamList, 'OrderSuccess'>;
 };
 
-export default function OrderSuccessScreen({ navigation }: Props) {
+export default function OrderSuccessScreen({ navigation, route }: Props) {
+  const { orderId } = route.params;
+  const { orders } = useOrders();
+  const order = orders.find(o => o.id === orderId);
+  const paymentLabel = order?.paymentMethod === 'card' ? 'Card / Wallet' : 'Cash on Delivery';
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
       <View style={styles.container}>
@@ -31,7 +38,7 @@ export default function OrderSuccessScreen({ navigation }: Props) {
 
         {/* Order info pill */}
         <View style={styles.orderBadge}>
-          <Text style={styles.orderBadgeText}>Order #DGB-{Math.floor(Math.random() * 9000) + 1000}</Text>
+          <Text style={styles.orderBadgeText}>Order #{orderId}</Text>
         </View>
 
         {/* Details */}
@@ -56,7 +63,7 @@ export default function OrderSuccessScreen({ navigation }: Props) {
             <Text style={styles.detailIcon}>💵</Text>
             <View>
               <Text style={styles.detailLabel}>Payment</Text>
-              <Text style={styles.detailVal}>Cash on Delivery</Text>
+              <Text style={styles.detailVal}>{paymentLabel}</Text>
             </View>
           </View>
         </View>
@@ -64,7 +71,7 @@ export default function OrderSuccessScreen({ navigation }: Props) {
         <View style={styles.actions}>
           <Button
             label="Track Order 🗺️"
-            onPress={() => navigation.navigate('OrderTracking')}
+            onPress={() => navigation.navigate('OrderTracking', { orderId })}
             size="lg"
           />
           <Button

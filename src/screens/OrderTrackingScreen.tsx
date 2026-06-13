@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteProp } from '@react-navigation/native';
 import Button from '../components/Button';
 import Colors from '../constants/colors';
 import Spacing from '../constants/spacing';
 import { RootStackParamList } from '../types';
+import { useOrders } from '../context/OrdersContext';
+import { notifyOrderDelivered } from '../services/notificationService';
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'OrderTracking'>;
+  route: RouteProp<RootStackParamList, 'OrderTracking'>;
 };
 
 const STEPS = [
@@ -18,7 +22,6 @@ const STEPS = [
     desc: 'Your order has been received.',
     emoji: '✅',
     time: '6:02 AM',
-    done: true,
   },
   {
     id: 2,
@@ -26,7 +29,6 @@ const STEPS = [
     desc: 'Your dairy items are being packed fresh.',
     emoji: '📦',
     time: '6:15 AM',
-    done: true,
   },
   {
     id: 3,
@@ -34,20 +36,31 @@ const STEPS = [
     desc: 'Your order is on its way to you!',
     emoji: '🚚',
     time: '6:45 AM',
-    done: true,
   },
   {
     id: 4,
     label: 'Delivered',
     desc: 'Order delivered. Enjoy your fresh dairy!',
     emoji: '🥛',
-    time: 'Expected 8:00 AM',
-    done: false,
+    time: '8:00 AM',
   },
 ];
 
-export default function OrderTrackingScreen({ navigation }: Props) {
-  const currentStep = 3; // Out for delivery
+export default function OrderTrackingScreen({ navigation, route }: Props) {
+  const orderId = route.params?.orderId;
+  const { orders, updateOrderStatus } = useOrders();
+  const order = orders.find(o => o.id === orderId);
+
+  const [delivered, setDelivered] = useState(order?.status === 'Delivered');
+  const currentStep = delivered ? 4 : 3; // 3 = Out for delivery, 4 = Delivered
+
+  const handleMarkDelivered = () => {
+    setDelivered(true);
+    if (orderId) updateOrderStatus(orderId, 'Delivered');
+    notifyOrderDelivered();
+  };
+
+  const deliveryAddress = order?.address ?? 'Your registered address, Gilgit';
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
@@ -55,20 +68,30 @@ export default function OrderTrackingScreen({ navigation }: Props) {
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.title}>Track Order</Text>
-          <View style={styles.orderBadge}>
-            <Text style={styles.orderBadgeText}>🚚 In Transit</Text>
+          <View style={[styles.orderBadge, delivered && styles.orderBadgeDelivered]}>
+            <Text style={[styles.orderBadgeText, delivered && styles.orderBadgeTextDelivered]}>
+              {delivered ? '📦 Delivered' : '🚚 In Transit'}
+            </Text>
           </View>
         </View>
 
+        {orderId && (
+          <Text style={styles.orderIdText}>Order #{orderId}</Text>
+        )}
+
         {/* Map placeholder */}
         <View style={styles.mapPlaceholder}>
-          <Text style={styles.mapEmoji}>🗺️</Text>
-          <Text style={styles.mapTitle}>Live Tracking</Text>
-          <Text style={styles.mapSub}>Delivery agent is 2.3 km away</Text>
-          <View style={styles.agentRow}>
-            <View style={styles.agentDot} />
-            <Text style={styles.agentText}>Ali (Delivery Agent) • ⭐ 4.9</Text>
-          </View>
+          <Text style={styles.mapEmoji}>{delivered ? '🏠' : '🗺️'}</Text>
+          <Text style={styles.mapTitle}>{delivered ? 'Order Delivered' : 'Live Tracking'}</Text>
+          <Text style={styles.mapSub}>
+            {delivered ? 'Enjoy your fresh dairy!' : 'Delivery agent is 2.3 km away'}
+          </Text>
+          {!delivered && (
+            <View style={styles.agentRow}>
+              <View style={styles.agentDot} />
+              <Text style={styles.agentText}>Ali (Delivery Agent) • ⭐ 4.9</Text>
+            </View>
+          )}
         </View>
 
         {/* Progress Steps */}
@@ -124,7 +147,9 @@ export default function OrderTrackingScreen({ navigation }: Props) {
                   {isActive && (
                     <View style={styles.activePill}>
                       <View style={styles.activeDot} />
-                      <Text style={styles.activeText}>In Progress</Text>
+                      <Text style={styles.activeText}>
+                        {step.id === 4 ? 'Completed' : 'In Progress'}
+                      </Text>
                     </View>
                   )}
                 </View>
@@ -139,18 +164,38 @@ export default function OrderTrackingScreen({ navigation }: Props) {
             <Text style={styles.infoIcon}>📍</Text>
             <View>
               <Text style={styles.infoLabel}>Delivering To</Text>
-              <Text style={styles.infoVal}>Your registered address, Gilgit</Text>
+              <Text style={styles.infoVal}>{deliveryAddress}</Text>
             </View>
           </View>
           <View style={styles.infoDivider} />
           <View style={styles.infoRow}>
             <Text style={styles.infoIcon}>⏱️</Text>
             <View>
-              <Text style={styles.infoLabel}>Estimated Arrival</Text>
-              <Text style={styles.infoVal}>8:00 AM – 8:30 AM</Text>
+              <Text style={styles.infoLabel}>{delivered ? 'Delivered At' : 'Estimated Arrival'}</Text>
+              <Text style={styles.infoVal}>{delivered ? '8:00 AM' : '8:00 AM – 8:30 AM'}</Text>
             </View>
           </View>
+          {order && (
+            <>
+              <View style={styles.infoDivider} />
+              <View style={styles.infoRow}>
+                <Text style={styles.infoIcon}>💵</Text>
+                <View>
+                  <Text style={styles.infoLabel}>Order Total</Text>
+                  <Text style={styles.infoVal}>Rs {order.grandTotal.toLocaleString()}</Text>
+                </View>
+              </View>
+            </>
+          )}
         </View>
+
+        {!delivered && (
+          <Button
+            label="Mark as Delivered 📦"
+            onPress={handleMarkDelivered}
+            style={styles.markDeliveredBtn}
+          />
+        )}
 
         <Button
           label="Back to Shop"
@@ -181,7 +226,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#F59E0B',
   },
+  orderBadgeDelivered: {
+    backgroundColor: Colors.primaryLight,
+    borderColor: Colors.primary,
+  },
   orderBadgeText: { fontSize: Spacing.font.xs, fontWeight: '700', color: '#B45309' },
+  orderBadgeTextDelivered: { color: Colors.primaryDark },
+  orderIdText: {
+    fontSize: Spacing.font.sm,
+    fontWeight: '700',
+    color: Colors.textSecondary,
+    marginBottom: Spacing.sm,
+  },
   mapPlaceholder: {
     backgroundColor: Colors.surface,
     borderRadius: Spacing.radius.xl,
@@ -302,5 +358,6 @@ const styles = StyleSheet.create({
   infoLabel: { fontSize: Spacing.font.xs, color: Colors.textMuted },
   infoVal: { fontSize: Spacing.font.sm, fontWeight: '700', color: Colors.textPrimary, marginTop: 2 },
   infoDivider: { height: 1, backgroundColor: Colors.borderLight },
+  markDeliveredBtn: { marginBottom: Spacing.sm },
   backBtn: {},
 });
