@@ -1,19 +1,18 @@
-import React from 'react';
 import {
   ScrollView,
   TouchableOpacity,
   Text,
   StyleSheet,
   View,
-} from 'react-native';
-import { Category } from '../types';
-import Colors from '../constants/colors';
-import Spacing from '../constants/spacing';
+} from "react-native";
+import { Category } from "../types";
+import Colors from "../constants/colors";
+import Spacing from "../constants/spacing";
 
 const CATEGORIES: { id: Category; emoji: string }[] = [
-  { id: 'Milk', emoji: '🥛' },
-  { id: 'Yogurt & Lassi', emoji: '🫙' },
-  { id: 'Butter & Ghee', emoji: '🧈' },
+  { id: "Milk", emoji: "🥛" },
+  { id: "Yogurt & Lassi", emoji: "🫙" },
+  { id: "Butter & Ghee", emoji: "🧈" },
 ];
 
 interface CategoryTabsProps {
@@ -21,14 +20,17 @@ interface CategoryTabsProps {
   onSelect: (cat: Category) => void;
 }
 
-export default function CategoryTabs({ selected, onSelect }: CategoryTabsProps) {
+export default function CategoryTabs({
+  selected,
+  onSelect,
+}: CategoryTabsProps) {
   return (
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.container}
     >
-      {CATEGORIES.map(cat => {
+      {CATEGORIES.map((cat) => {
         const active = cat.id === selected;
         return (
           <TouchableOpacity
@@ -54,11 +56,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
     gap: Spacing.sm,
-    marginBottom: Spacing.sm,
+    marginBottom: Spacing.lg,
   },
   tab: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 6,
     paddingVertical: 10,
     paddingHorizontal: Spacing.md,
@@ -66,7 +68,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.card,
     borderWidth: 1.5,
     borderColor: Colors.border,
-    position: 'relative',
+    position: "relative",
     height: 40,
   },
   tabActive: {
@@ -76,14 +78,14 @@ const styles = StyleSheet.create({
   emoji: { fontSize: 16 },
   label: {
     fontSize: Spacing.font.sm,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.textSecondary,
   },
   labelActive: { color: Colors.primaryDark },
   dot: {
-    position: 'absolute',
+    position: "absolute",
     bottom: -2,
-    left: '50%',
+    left: "50%",
     width: 4,
     height: 4,
     borderRadius: 2,

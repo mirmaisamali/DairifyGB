@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 import {
   View,
   Text,
@@ -6,37 +6,45 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useCart } from '../context/CartContext';
-import { useOrders } from '../context/OrdersContext';
-import { notifyOrderPlaced } from '../services/notificationService';
-import { generateOrderId } from '../utils/format';
-import Button from '../components/Button';
-import EmptyState from '../components/EmptyState';
-import Colors from '../constants/colors';
-import Spacing from '../constants/spacing';
-import { Order, RootStackParamList } from '../types';
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useCart } from "../context/CartContext";
+import { useOrders } from "../context/OrdersContext";
+import { notifyOrderPlaced } from "../services/notificationService";
+import { generateOrderId } from "../utils/format";
+import Button from "../components/Button";
+import EmptyState from "../components/EmptyState";
+import Colors from "../constants/colors";
+import Spacing from "../constants/spacing";
+import { Order, RootStackParamList } from "../types";
 
-type PaymentMethod = 'cod' | 'card';
+type PaymentMethod = "cod" | "card";
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList>;
 };
 
 export default function CartScreen({ navigation }: Props) {
-  const { items, loading, updateQuantity, removeFromCart, totalItems, totalPrice, clearCart } = useCart();
+  const {
+    items,
+    loading,
+    updateQuantity,
+    removeFromCart,
+    totalItems,
+    totalPrice,
+    clearCart,
+  } = useCart();
   const { addOrder } = useOrders();
-  const [address, setAddress] = useState('');
-  const [payment, setPayment] = useState<PaymentMethod>('cod');
+  const [address, setAddress] = useState("");
+  const [payment, setPayment] = useState<PaymentMethod>("cod");
 
   const deliveryFee = totalPrice > 500 ? 0 : 50;
   const grandTotal = totalPrice + deliveryFee;
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.safe} edges={['top']}>
+      <SafeAreaView style={styles.safe} edges={["top"]}>
         <View style={styles.loadingContainer}>
           <Text style={styles.loadingEmoji}>🛒</Text>
           <Text style={styles.loadingText}>Loading your cart...</Text>
@@ -47,7 +55,7 @@ export default function CartScreen({ navigation }: Props) {
 
   if (items.length === 0) {
     return (
-      <SafeAreaView style={styles.safe} edges={['top']}>
+      <SafeAreaView style={styles.safe} edges={["top"]}>
         <EmptyState
           emoji="🛒"
           title="Your cart is empty"
@@ -62,7 +70,7 @@ export default function CartScreen({ navigation }: Props) {
 
     const order: Order = {
       id: orderId,
-      items: items.map(i => ({
+      items: items.map((i) => ({
         productId: i.product.id,
         name: i.product.name,
         unit: i.product.unit,
@@ -73,21 +81,25 @@ export default function CartScreen({ navigation }: Props) {
       totalPrice,
       deliveryFee,
       grandTotal,
-      address: address.trim() || 'Default address, Gilgit',
+      address: address.trim() || "Default address, Gilgit",
       paymentMethod: payment,
       date: new Date().toISOString(),
-      status: 'Pending',
+      status: "Pending",
     };
 
     addOrder(order);
     notifyOrderPlaced(orderId);
     clearCart();
-    navigation.navigate('OrderSuccess', { orderId });
+    navigation.navigate("OrderSuccess", { orderId });
   };
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top']}>
-      <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
+    <SafeAreaView style={styles.safe} edges={["top"]}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}
+        automaticallyAdjustKeyboardInsets
+      >
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.title}>Your Cart</Text>
@@ -126,7 +138,11 @@ export default function CartScreen({ navigation }: Props) {
                       onPress={() => updateQuantity(item.product.id, 1)}
                       activeOpacity={0.8}
                     >
-                      <Text style={[styles.qtyBtnText, { color: Colors.white }]}>+</Text>
+                      <Text
+                        style={[styles.qtyBtnText, { color: Colors.white }]}
+                      >
+                        +
+                      </Text>
                     </TouchableOpacity>
                   </View>
                   <TouchableOpacity
@@ -162,20 +178,38 @@ export default function CartScreen({ navigation }: Props) {
           <Text style={styles.sectionTitle}>Payment Method</Text>
           <View style={styles.paymentOptions}>
             {[
-              { id: 'cod' as PaymentMethod, label: 'Cash on Delivery', emoji: '💵', desc: 'Pay when you receive' },
-              { id: 'card' as PaymentMethod, label: 'Card / Wallet', emoji: '💳', desc: 'JazzCash, EasyPaisa, Card' },
-            ].map(opt => {
+              {
+                id: "cod" as PaymentMethod,
+                label: "Cash on Delivery",
+                emoji: "💵",
+                desc: "Pay when you receive",
+              },
+              {
+                id: "card" as PaymentMethod,
+                label: "Card / Wallet",
+                emoji: "💳",
+                desc: "JazzCash, EasyPaisa, Card",
+              },
+            ].map((opt) => {
               const active = payment === opt.id;
               return (
                 <TouchableOpacity
                   key={opt.id}
-                  style={[styles.paymentCard, active && styles.paymentCardActive]}
+                  style={[
+                    styles.paymentCard,
+                    active && styles.paymentCardActive,
+                  ]}
                   onPress={() => setPayment(opt.id)}
                   activeOpacity={0.8}
                 >
                   <Text style={styles.paymentEmoji}>{opt.emoji}</Text>
                   <View style={styles.paymentInfo}>
-                    <Text style={[styles.paymentLabel, active && styles.paymentLabelActive]}>
+                    <Text
+                      style={[
+                        styles.paymentLabel,
+                        active && styles.paymentLabelActive,
+                      ]}
+                    >
                       {opt.label}
                     </Text>
                     <Text style={styles.paymentDesc}>{opt.desc}</Text>
@@ -194,21 +228,29 @@ export default function CartScreen({ navigation }: Props) {
           <Text style={styles.sectionTitle}>Order Summary</Text>
           <View style={styles.summaryRow}>
             <Text style={styles.summaryKey}>Subtotal</Text>
-            <Text style={styles.summaryVal}>Rs {totalPrice.toLocaleString()}</Text>
+            <Text style={styles.summaryVal}>
+              Rs {totalPrice.toLocaleString()}
+            </Text>
           </View>
           <View style={styles.summaryRow}>
             <Text style={styles.summaryKey}>Delivery Fee</Text>
-            <Text style={[styles.summaryVal, deliveryFee === 0 && styles.freeText]}>
-              {deliveryFee === 0 ? 'FREE 🎉' : `Rs ${deliveryFee}`}
+            <Text
+              style={[styles.summaryVal, deliveryFee === 0 && styles.freeText]}
+            >
+              {deliveryFee === 0 ? "FREE 🎉" : `Rs ${deliveryFee}`}
             </Text>
           </View>
           {deliveryFee === 0 && (
-            <Text style={styles.freeDeliveryNote}>🎉 Free delivery on orders above Rs 500!</Text>
+            <Text style={styles.freeDeliveryNote}>
+              🎉 Free delivery on orders above Rs 500!
+            </Text>
           )}
           <View style={styles.totalDivider} />
           <View style={styles.summaryRow}>
             <Text style={styles.totalLabel}>Total</Text>
-            <Text style={styles.totalVal}>Rs {grandTotal.toLocaleString()}</Text>
+            <Text style={styles.totalVal}>
+              Rs {grandTotal.toLocaleString()}
+            </Text>
           </View>
         </View>
 
@@ -227,16 +269,20 @@ const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.background },
   container: { padding: Spacing.md, paddingBottom: Spacing.xxl },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: Spacing.md,
   },
-  title: { fontSize: Spacing.font.xxl, fontWeight: '900', color: Colors.textPrimary },
+  title: {
+    fontSize: Spacing.font.xxl,
+    fontWeight: "900",
+    color: Colors.textPrimary,
+  },
   itemCount: {
     fontSize: Spacing.font.sm,
     color: Colors.textMuted,
-    fontWeight: '500',
+    fontWeight: "500",
     backgroundColor: Colors.borderLight,
     paddingHorizontal: 10,
     paddingVertical: 4,
@@ -247,12 +293,12 @@ const styles = StyleSheet.create({
     borderRadius: Spacing.radius.lg,
     borderWidth: 1,
     borderColor: Colors.border,
-    overflow: 'hidden',
+    overflow: "hidden",
     marginBottom: Spacing.md,
   },
   cartItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     padding: Spacing.md,
     gap: Spacing.sm,
   },
@@ -261,35 +307,61 @@ const styles = StyleSheet.create({
     height: 56,
     borderRadius: Spacing.radius.md,
     backgroundColor: Colors.surface,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   itemEmoji: { fontSize: 28 },
   itemInfo: { flex: 1 },
-  itemName: { fontSize: Spacing.font.sm, fontWeight: '700', color: Colors.textPrimary },
-  itemUnit: { fontSize: Spacing.font.xs, color: Colors.textMuted, marginTop: 2 },
-  itemPrice: { fontSize: Spacing.font.md, fontWeight: '800', color: Colors.primary, marginTop: 4 },
-  itemActions: { alignItems: 'flex-end', gap: 8 },
-  qtyRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  itemName: {
+    fontSize: Spacing.font.sm,
+    fontWeight: "700",
+    color: Colors.textPrimary,
+  },
+  itemUnit: {
+    fontSize: Spacing.font.xs,
+    color: Colors.textMuted,
+    marginTop: 2,
+  },
+  itemPrice: {
+    fontSize: Spacing.font.md,
+    fontWeight: "800",
+    color: Colors.primary,
+    marginTop: 4,
+  },
+  itemActions: { alignItems: "flex-end", gap: 8 },
+  qtyRow: { flexDirection: "row", alignItems: "center", gap: 8 },
   qtyBtn: {
     width: 28,
     height: 28,
     borderRadius: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     borderWidth: 1.5,
     borderColor: Colors.border,
   },
   qtyBtnPlus: { backgroundColor: Colors.primary, borderColor: Colors.primary },
-  qtyBtnText: { fontSize: 15, fontWeight: '700', color: Colors.textPrimary },
-  qtyNum: { fontSize: Spacing.font.md, fontWeight: '700', minWidth: 18, textAlign: 'center' },
+  qtyBtnText: { fontSize: 15, fontWeight: "700", color: Colors.textPrimary },
+  qtyNum: {
+    fontSize: Spacing.font.md,
+    fontWeight: "700",
+    minWidth: 18,
+    textAlign: "center",
+  },
   removeBtn: { paddingVertical: 2 },
-  removeBtnText: { fontSize: Spacing.font.xs, color: Colors.error, fontWeight: '600' },
-  divider: { height: 1, backgroundColor: Colors.borderLight, marginHorizontal: Spacing.md },
+  removeBtnText: {
+    fontSize: Spacing.font.xs,
+    color: Colors.error,
+    fontWeight: "600",
+  },
+  divider: {
+    height: 1,
+    backgroundColor: Colors.borderLight,
+    marginHorizontal: Spacing.md,
+  },
   section: { marginBottom: Spacing.md },
   sectionTitle: {
     fontSize: Spacing.font.md,
-    fontWeight: '800',
+    fontWeight: "800",
     color: Colors.textPrimary,
     marginBottom: Spacing.sm,
   },
@@ -305,8 +377,8 @@ const styles = StyleSheet.create({
   },
   paymentOptions: { gap: Spacing.sm },
   paymentCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: Spacing.sm,
     backgroundColor: Colors.card,
     borderRadius: Spacing.radius.md,
@@ -314,23 +386,39 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: Colors.border,
   },
-  paymentCardActive: { borderColor: Colors.primary, backgroundColor: Colors.surface },
+  paymentCardActive: {
+    borderColor: Colors.primary,
+    backgroundColor: Colors.surface,
+  },
   paymentEmoji: { fontSize: 28 },
   paymentInfo: { flex: 1 },
-  paymentLabel: { fontSize: Spacing.font.sm, fontWeight: '700', color: Colors.textPrimary },
+  paymentLabel: {
+    fontSize: Spacing.font.sm,
+    fontWeight: "700",
+    color: Colors.textPrimary,
+  },
   paymentLabelActive: { color: Colors.primaryDark },
-  paymentDesc: { fontSize: Spacing.font.xs, color: Colors.textMuted, marginTop: 2 },
+  paymentDesc: {
+    fontSize: Spacing.font.xs,
+    color: Colors.textMuted,
+    marginTop: 2,
+  },
   radio: {
     width: 20,
     height: 20,
     borderRadius: 10,
     borderWidth: 2,
     borderColor: Colors.border,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   radioActive: { borderColor: Colors.primary },
-  radioInner: { width: 10, height: 10, borderRadius: 5, backgroundColor: Colors.primary },
+  radioInner: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: Colors.primary,
+  },
   summaryCard: {
     backgroundColor: Colors.card,
     borderRadius: Spacing.radius.lg,
@@ -340,29 +428,49 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.lg,
     gap: Spacing.sm,
   },
-  summaryRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  summaryRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   summaryKey: { fontSize: Spacing.font.sm, color: Colors.textSecondary },
-  summaryVal: { fontSize: Spacing.font.sm, fontWeight: '700', color: Colors.textPrimary },
+  summaryVal: {
+    fontSize: Spacing.font.sm,
+    fontWeight: "700",
+    color: Colors.textPrimary,
+  },
   freeText: { color: Colors.success },
   freeDeliveryNote: {
     fontSize: Spacing.font.xs,
     color: Colors.success,
-    fontWeight: '600',
-    textAlign: 'center',
-    backgroundColor: '#F0FDF4',
+    fontWeight: "600",
+    textAlign: "center",
+    backgroundColor: "#F0FDF4",
     borderRadius: Spacing.radius.sm,
     paddingVertical: 4,
   },
   totalDivider: { height: 1.5, backgroundColor: Colors.border },
-  totalLabel: { fontSize: Spacing.font.lg, fontWeight: '900', color: Colors.textPrimary },
-  totalVal: { fontSize: Spacing.font.xl, fontWeight: '900', color: Colors.primary },
+  totalLabel: {
+    fontSize: Spacing.font.lg,
+    fontWeight: "900",
+    color: Colors.textPrimary,
+  },
+  totalVal: {
+    fontSize: Spacing.font.xl,
+    fontWeight: "900",
+    color: Colors.primary,
+  },
   placeOrderBtn: {},
   loadingContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     gap: Spacing.sm,
   },
   loadingEmoji: { fontSize: 48 },
-  loadingText: { fontSize: Spacing.font.md, color: Colors.textSecondary, fontWeight: '500' },
+  loadingText: {
+    fontSize: Spacing.font.md,
+    color: Colors.textSecondary,
+    fontWeight: "500",
+  },
 });

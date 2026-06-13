@@ -1,13 +1,13 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 /**
  * Storage keys used across the app. Keeping them centralized avoids
  * typos and makes it easy to see everything that's persisted.
  */
 export const STORAGE_KEYS = {
-  CART: '@dairifygb/cart',
-  FAVORITES: '@dairifygb/favorites',
-  ORDERS: '@dairifygb/orders',
+  CART: "@dairifygb/cart",
+  FAVORITES: "@dairifygb/favorites",
+  ORDERS: "@dairifygb/orders",
 } as const;
 
 /**

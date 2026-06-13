@@ -18,15 +18,15 @@ export type MainTabParamList = {
 
 // ─── Domain types ─────────────────────────────────────────────────────────────
 
-export type Category = 'Milk' | 'Yogurt & Lassi' | 'Butter & Ghee';
+export type Category = "Milk" | "Yogurt & Lassi" | "Butter & Ghee";
 
 export interface Product {
   id: string;
   name: string;
   category: Category;
-  price: number;         // PKR
-  unit: string;          // e.g. "1 Litre", "500g"
-  emoji: string;         // placeholder instead of image
+  price: number; // PKR
+  unit: string; // e.g. "1 Litre", "500g"
+  emoji: string; // placeholder instead of image
   description: string;
 }
 
@@ -35,8 +35,8 @@ export interface CartItem {
   quantity: number;
 }
 
-export type SubscriptionFrequency = 'Daily' | 'Alternate Days' | 'Weekly';
-export type SubscriptionDuration = '1 Week' | '1 Month';
+export type SubscriptionFrequency = "Daily" | "Alternate Days" | "Weekly";
+export type SubscriptionDuration = "1 Week" | "1 Month";
 
 export interface SubscriptionOption {
   id: SubscriptionFrequency;
@@ -48,7 +48,7 @@ export interface SubscriptionOption {
 
 // ─── Order types ──────────────────────────────────────────────────────────────
 
-export type OrderStatus = 'Pending' | 'Delivered';
+export type OrderStatus = "Pending" | "Delivered";
 
 export interface OrderItem {
   productId: string;
@@ -66,7 +66,7 @@ export interface Order {
   deliveryFee: number;
   grandTotal: number;
   address: string;
-  paymentMethod: 'cod' | 'card';
-  date: string;     // ISO timestamp
+  paymentMethod: "cod" | "card";
+  date: string; // ISO timestamp
   status: OrderStatus;
 }

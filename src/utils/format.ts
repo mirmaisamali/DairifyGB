@@ -12,14 +12,14 @@ export function generateOrderId(): string {
  */
 export function formatOrderDate(iso: string): string {
   const date = new Date(iso);
-  const datePart = date.toLocaleDateString('en-GB', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
+  const datePart = date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
   });
-  const timePart = date.toLocaleTimeString('en-US', {
-    hour: 'numeric',
-    minute: '2-digit',
+  const timePart = date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
     hour12: true,
   });
   return `${datePart}, ${timePart}`;

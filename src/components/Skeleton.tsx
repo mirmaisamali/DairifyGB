@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
-import { Animated, View, StyleSheet, ViewStyle } from 'react-native';
-import Colors from '../constants/colors';
-import Spacing from '../constants/spacing';
+import { useEffect, useRef } from "react";
+import { Animated, View, StyleSheet, ViewStyle } from "react-native";
+import Colors from "../constants/colors";
+import Spacing from "../constants/spacing";
 
 interface SkeletonBoxProps {
   width?: number | string;
@@ -11,15 +11,28 @@ interface SkeletonBoxProps {
 }
 
 /** A single shimmering placeholder box. */
-export function SkeletonBox({ width = '100%', height = 16, borderRadius = 8, style }: SkeletonBoxProps) {
+export function SkeletonBox({
+  width = "100%",
+  height = 16,
+  borderRadius = 8,
+  style,
+}: SkeletonBoxProps) {
   const opacity = useRef(new Animated.Value(0.4)).current;
 
   useEffect(() => {
     const loop = Animated.loop(
       Animated.sequence([
-        Animated.timing(opacity, { toValue: 1, duration: 600, useNativeDriver: true }),
-        Animated.timing(opacity, { toValue: 0.4, duration: 600, useNativeDriver: true }),
-      ])
+        Animated.timing(opacity, {
+          toValue: 1,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+        Animated.timing(opacity, {
+          toValue: 0.4,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+      ]),
     );
     loop.start();
     return () => loop.stop();
@@ -28,7 +41,13 @@ export function SkeletonBox({ width = '100%', height = 16, borderRadius = 8, sty
   return (
     <Animated.View
       style={[
-        { width: width as any, height, borderRadius, backgroundColor: Colors.borderLight, opacity },
+        {
+          width: width as any,
+          height,
+          borderRadius,
+          backgroundColor: Colors.borderLight,
+          opacity,
+        },
         style,
       ]}
     />
@@ -47,7 +66,11 @@ export function ProductCardSkeleton() {
         <SkeletonBox height={10} width="70%" style={{ marginBottom: 10 }} />
         <View style={styles.footerRow}>
           <SkeletonBox height={18} width={50} />
-          <SkeletonBox height={28} width={70} borderRadius={Spacing.radius.full} />
+          <SkeletonBox
+            height={28}
+            width={70}
+            borderRadius={Spacing.radius.full}
+          />
         </View>
       </View>
     </View>
@@ -71,23 +94,23 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.card,
     borderRadius: Spacing.radius.lg,
-    overflow: 'hidden',
+    overflow: "hidden",
     borderWidth: 1,
     borderColor: Colors.border,
   },
   body: { padding: Spacing.sm + 4 },
   footerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     paddingHorizontal: 6,
   },
   gridItem: {
-    width: '50%',
+    width: "50%",
     padding: 6,
   },
 });

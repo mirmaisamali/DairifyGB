@@ -1,5 +1,5 @@
-import { Product, Category } from '../types';
-import productsData from '../data/products.json';
+import { Product, Category } from "../types";
+import productsData from "../data/products.json";
 
 const ALL_PRODUCTS: Product[] = productsData.products as Product[];
 
@@ -7,12 +7,12 @@ const ALL_PRODUCTS: Product[] = productsData.products as Product[];
 const MOCK_DELAY_MS = 500;
 
 function delay<T>(value: T, ms: number = MOCK_DELAY_MS): Promise<T> {
-  return new Promise(resolve => setTimeout(() => resolve(value), ms));
+  return new Promise((resolve) => setTimeout(() => resolve(value), ms));
 }
 
 export interface ProductFilters {
   search?: string;
-  category?: Category | 'All';
+  category?: Category | "All";
   minPrice?: number;
   maxPrice?: number;
 }
@@ -28,14 +28,16 @@ export async function getAllProducts(): Promise<Product[]> {
  * Fetch a single product by id.
  */
 export async function getProductById(id: string): Promise<Product | undefined> {
-  return delay(ALL_PRODUCTS.find(p => p.id === id));
+  return delay(ALL_PRODUCTS.find((p) => p.id === id));
 }
 
 /**
  * Fetch products belonging to a category.
  */
-export async function getProductsByCategory(category: Category): Promise<Product[]> {
-  return delay(ALL_PRODUCTS.filter(p => p.category === category));
+export async function getProductsByCategory(
+  category: Category,
+): Promise<Product[]> {
+  return delay(ALL_PRODUCTS.filter((p) => p.category === category));
 }
 
 /**
@@ -44,17 +46,20 @@ export async function getProductsByCategory(category: Category): Promise<Product
  * - `category`: exact category match ('All' returns everything)
  * - `minPrice` / `maxPrice`: inclusive price range
  */
-export async function searchProducts(filters: ProductFilters): Promise<Product[]> {
+export async function searchProducts(
+  filters: ProductFilters,
+): Promise<Product[]> {
   const { search, category, minPrice, maxPrice } = filters;
-  const query = search?.trim().toLowerCase() ?? '';
+  const query = search?.trim().toLowerCase() ?? "";
 
-  const results = ALL_PRODUCTS.filter(p => {
+  const results = ALL_PRODUCTS.filter((p) => {
     const matchesSearch =
       !query ||
       p.name.toLowerCase().includes(query) ||
       p.description.toLowerCase().includes(query);
 
-    const matchesCategory = !category || category === 'All' || p.category === category;
+    const matchesCategory =
+      !category || category === "All" || p.category === category;
 
     const matchesMin = minPrice === undefined || p.price >= minPrice;
     const matchesMax = maxPrice === undefined || p.price <= maxPrice;
@@ -70,8 +75,12 @@ export async function searchProducts(filters: ProductFilters): Promise<Product[]
  * building a price-range filter slider/inputs.
  */
 export function getPriceBounds(): { min: number; max: number } {
-  const prices = ALL_PRODUCTS.map(p => p.price);
+  const prices = ALL_PRODUCTS.map((p) => p.price);
   return { min: Math.min(...prices), max: Math.max(...prices) };
 }
 
-export const CATEGORIES: Category[] = ['Milk', 'Yogurt & Lassi', 'Butter & Ghee'];
+export const CATEGORIES: Category[] = [
+  "Milk",
+  "Yogurt & Lassi",
+  "Butter & Ghee",
+];

@@ -9,19 +9,19 @@ All data is persisted locally on-device using AsyncStorage — no backend, no se
 
 ## Tech Stack
 
-| Package | Version |
-|---|---|
-| expo | ~56.0.11 |
-| react | 19.2.3 |
-| react-native | 0.85.3 |
-| @react-navigation/native | ^6.1.17 |
-| @react-navigation/native-stack | ^6.9.26 |
-| @react-navigation/bottom-tabs | ^6.5.20 |
-| @react-native-async-storage/async-storage | 2.2.0 |
-| expo-notifications | ~0.33.2 |
-| expo-splash-screen | ~56.0.10 |
-| react-native-safe-area-context | ~5.7.0 |
-| react-native-screens | 4.25.2 |
+| Package                                   | Version  |
+| ----------------------------------------- | -------- |
+| expo                                      | ~56.0.11 |
+| react                                     | 19.2.3   |
+| react-native                              | 0.85.3   |
+| @react-navigation/native                  | ^6.1.17  |
+| @react-navigation/native-stack            | ^6.9.26  |
+| @react-navigation/bottom-tabs             | ^6.5.20  |
+| @react-native-async-storage/async-storage | 2.2.0    |
+| expo-notifications                        | ~0.33.2  |
+| expo-splash-screen                        | ~56.0.10 |
+| react-native-safe-area-context            | ~5.7.0   |
+| react-native-screens                      | 4.25.2   |
 
 ---
 
@@ -73,15 +73,18 @@ Splash Screen (2.5s auto-navigate)
 ## ✨ New Features (Frontend + Local Storage Only)
 
 ### 🛒 Persistent Cart
+
 Cart contents are saved to AsyncStorage and restored automatically on app
 restart. Add, remove, and update quantities — totals recalculate live.
 
 ### ❤️ Favorites / Wishlist
+
 Tap the heart icon on any product card to save it. Favorites persist across
 restarts and appear in the dedicated **Favorites** tab, with an empty state
 when nothing is saved yet.
 
 ### 📦 Order History
+
 Placing an order from the Cart screen creates a realistic `Order` record
 (id, items, totals, address, payment method, timestamp, status) and saves it
 to AsyncStorage. The **Orders** tab lists all past orders with status badges
@@ -89,24 +92,29 @@ to AsyncStorage. The **Orders** tab lists all past orders with status badges
 can mark it as delivered.
 
 ### 🔍 Search + Filter
+
 The Shop screen now has a search bar (matches product name & description) and
 a price-range filter modal — both run entirely against the local
 `products.json` data via `productService`.
 
 ### 📱 Offline Data Layer
+
 Product data lives in `src/data/products.json`. `src/services/productService.ts`
 exposes async functions (`getAllProducts`, `searchProducts`, `getProductsByCategory`,
 etc.) that mimic an API service so the rest of the app is decoupled from the
 data source.
 
 ### 🎯 UI/UX Improvements
+
 - **Skeleton loaders** (`src/components/Skeleton.tsx`) while product/order data loads
 - **Empty states** (`src/components/EmptyState.tsx`) for empty cart, favorites, orders, and search results
 - **Pull-to-refresh** on Shop, Favorites, and Orders
 - Cart and Order screens show a lightweight loading state while AsyncStorage hydrates
 
 ### 🔔 Local Notifications
+
 Using `expo-notifications` (no backend required):
+
 - **"Order Placed Successfully 🎉"** — fired when an order is placed
 - **"Delivered 📦"** — fired when you tap "Mark as Delivered" on the tracking screen
 
