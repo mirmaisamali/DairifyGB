@@ -1,34 +1,37 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { SUBSCRIPTION_OPTIONS } from '../data/products';
-import { SubscriptionFrequency, SubscriptionDuration } from '../types';
-import Button from '../components/Button';
-import Colors from '../constants/colors';
-import Spacing from '../constants/spacing';
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { SUBSCRIPTION_OPTIONS } from "../data/products";
+import { SubscriptionFrequency, SubscriptionDuration } from "../types";
+import Button from "../components/Button";
+import Colors from "../constants/colors";
+import Spacing from "../constants/spacing";
 
-const DURATIONS: SubscriptionDuration[] = ['1 Week', '1 Month'];
+const DURATIONS: SubscriptionDuration[] = ["1 Week", "1 Month"];
 
 export default function SubscriptionScreen() {
-  const [selectedFreq, setSelectedFreq] = useState<SubscriptionFrequency>('Daily');
-  const [selectedDuration, setSelectedDuration] = useState<SubscriptionDuration>('1 Week');
+  const [selectedFreq, setSelectedFreq] =
+    useState<SubscriptionFrequency>("Daily");
+  const [selectedDuration, setSelectedDuration] =
+    useState<SubscriptionDuration>("1 Week");
   const [confirmed, setConfirmed] = useState(false);
 
   if (confirmed) {
     return (
-      <SafeAreaView style={styles.safe} edges={['top']}>
+      <SafeAreaView style={styles.safe} edges={["top"]}>
         <View style={styles.successContainer}>
           <Text style={styles.successEmoji}>🎉</Text>
           <Text style={styles.successTitle}>Subscription Active!</Text>
           <Text style={styles.successSub}>
-            Your <Text style={{ fontWeight: '800' }}>{selectedFreq}</Text> plan
-            for <Text style={{ fontWeight: '800' }}>{selectedDuration}</Text> has been set up.
+            Your <Text style={{ fontWeight: "800" }}>{selectedFreq}</Text> plan
+            for <Text style={{ fontWeight: "800" }}>{selectedDuration}</Text>{" "}
+            has been set up.
           </Text>
           <Text style={styles.successNote}>
             We'll deliver fresh dairy right to your door on schedule.
@@ -45,8 +48,11 @@ export default function SubscriptionScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top']}>
-      <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
+    <SafeAreaView style={styles.safe} edges={["top"]}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.title}>Subscribe & Save</Text>
@@ -58,7 +64,7 @@ export default function SubscriptionScreen() {
         {/* Frequency Options */}
         <Text style={styles.sectionLabel}>Delivery Frequency</Text>
         <View style={styles.optionsList}>
-          {SUBSCRIPTION_OPTIONS.map(opt => {
+          {SUBSCRIPTION_OPTIONS.map((opt) => {
             const active = opt.id === selectedFreq;
             return (
               <TouchableOpacity
@@ -68,19 +74,39 @@ export default function SubscriptionScreen() {
                 activeOpacity={0.8}
               >
                 <View style={styles.optionLeft}>
-                  <View style={[styles.optionIconWrapper, active && styles.optionIconWrapperActive]}>
+                  <View
+                    style={[
+                      styles.optionIconWrapper,
+                      active && styles.optionIconWrapperActive,
+                    ]}
+                  >
                     <Text style={styles.optionIcon}>{opt.emoji}</Text>
                   </View>
                   <View style={styles.optionText}>
-                    <Text style={[styles.optionLabel, active && styles.optionLabelActive]}>
+                    <Text
+                      style={[
+                        styles.optionLabel,
+                        active && styles.optionLabelActive,
+                      ]}
+                    >
                       {opt.label}
                     </Text>
                     <Text style={styles.optionDesc}>{opt.description}</Text>
                   </View>
                 </View>
                 <View style={styles.optionRight}>
-                  <View style={[styles.savingsBadge, active && styles.savingsBadgeActive]}>
-                    <Text style={[styles.savingsText, active && styles.savingsTextActive]}>
+                  <View
+                    style={[
+                      styles.savingsBadge,
+                      active && styles.savingsBadgeActive,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.savingsText,
+                        active && styles.savingsTextActive,
+                      ]}
+                    >
                       {opt.savings}
                     </Text>
                   </View>
@@ -96,16 +122,24 @@ export default function SubscriptionScreen() {
         {/* Duration */}
         <Text style={styles.sectionLabel}>Plan Duration</Text>
         <View style={styles.durationRow}>
-          {DURATIONS.map(d => {
+          {DURATIONS.map((d) => {
             const active = d === selectedDuration;
             return (
               <TouchableOpacity
                 key={d}
-                style={[styles.durationChip, active && styles.durationChipActive]}
+                style={[
+                  styles.durationChip,
+                  active && styles.durationChipActive,
+                ]}
                 onPress={() => setSelectedDuration(d)}
                 activeOpacity={0.8}
               >
-                <Text style={[styles.durationText, active && styles.durationTextActive]}>
+                <Text
+                  style={[
+                    styles.durationText,
+                    active && styles.durationTextActive,
+                  ]}
+                >
                   {d}
                 </Text>
               </TouchableOpacity>
@@ -140,7 +174,8 @@ export default function SubscriptionScreen() {
         />
 
         <Text style={styles.note}>
-          You can cancel or modify your plan at any time before the next delivery.
+          You can cancel or modify your plan at any time before the next
+          delivery.
         </Text>
       </ScrollView>
     </SafeAreaView>
@@ -153,7 +188,7 @@ const styles = StyleSheet.create({
   header: { marginBottom: Spacing.lg },
   title: {
     fontSize: Spacing.font.xxl,
-    fontWeight: '900',
+    fontWeight: "900",
     color: Colors.textPrimary,
   },
   subtitle: {
@@ -164,7 +199,7 @@ const styles = StyleSheet.create({
   },
   sectionLabel: {
     fontSize: Spacing.font.md,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Colors.textPrimary,
     marginBottom: Spacing.sm,
     marginTop: Spacing.sm,
@@ -174,9 +209,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.card,
     borderRadius: Spacing.radius.lg,
     padding: Spacing.md,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     borderWidth: 1.5,
     borderColor: Colors.border,
   },
@@ -184,21 +219,26 @@ const styles = StyleSheet.create({
     borderColor: Colors.primary,
     backgroundColor: Colors.surface,
   },
-  optionLeft: { flexDirection: 'row', alignItems: 'center', flex: 1, gap: Spacing.sm },
+  optionLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+    gap: Spacing.sm,
+  },
   optionIconWrapper: {
     width: 48,
     height: 48,
     borderRadius: Spacing.radius.md,
     backgroundColor: Colors.borderLight,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   optionIconWrapperActive: { backgroundColor: Colors.primaryLight },
   optionIcon: { fontSize: 24 },
   optionText: { flex: 1 },
   optionLabel: {
     fontSize: Spacing.font.md,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Colors.textPrimary,
   },
   optionLabelActive: { color: Colors.primaryDark },
@@ -208,7 +248,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
     lineHeight: 16,
   },
-  optionRight: { alignItems: 'flex-end', gap: 8 },
+  optionRight: { alignItems: "flex-end", gap: 8 },
   savingsBadge: {
     backgroundColor: Colors.borderLight,
     borderRadius: Spacing.radius.full,
@@ -216,7 +256,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   savingsBadgeActive: { backgroundColor: Colors.primaryLight },
-  savingsText: { fontSize: Spacing.font.xs, fontWeight: '600', color: Colors.textMuted },
+  savingsText: {
+    fontSize: Spacing.font.xs,
+    fontWeight: "600",
+    color: Colors.textMuted,
+  },
   savingsTextActive: { color: Colors.primary },
   radio: {
     width: 20,
@@ -224,8 +268,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 2,
     borderColor: Colors.border,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   radioActive: { borderColor: Colors.primary },
   radioInner: {
@@ -234,12 +278,16 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: Colors.primary,
   },
-  durationRow: { flexDirection: 'row', gap: Spacing.sm, marginBottom: Spacing.lg },
+  durationRow: {
+    flexDirection: "row",
+    gap: Spacing.sm,
+    marginBottom: Spacing.lg,
+  },
   durationChip: {
     flex: 1,
     paddingVertical: 14,
     borderRadius: Spacing.radius.md,
-    alignItems: 'center',
+    alignItems: "center",
     borderWidth: 1.5,
     borderColor: Colors.border,
     backgroundColor: Colors.card,
@@ -250,7 +298,7 @@ const styles = StyleSheet.create({
   },
   durationText: {
     fontSize: Spacing.font.md,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Colors.textSecondary,
   },
   durationTextActive: { color: Colors.white },
@@ -265,17 +313,25 @@ const styles = StyleSheet.create({
   },
   summaryTitle: {
     fontSize: Spacing.font.md,
-    fontWeight: '800',
+    fontWeight: "800",
     color: Colors.textPrimary,
     marginBottom: 4,
   },
-  summaryRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  summaryRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   summaryKey: { fontSize: Spacing.font.sm, color: Colors.textSecondary },
-  summaryVal: { fontSize: Spacing.font.sm, fontWeight: '700', color: Colors.textPrimary },
+  summaryVal: {
+    fontSize: Spacing.font.sm,
+    fontWeight: "700",
+    color: Colors.textPrimary,
+  },
   divider: { height: 1, backgroundColor: Colors.borderLight },
   ctaBtn: { marginBottom: Spacing.md },
   note: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: Spacing.font.xs,
     color: Colors.textMuted,
     lineHeight: 18,
@@ -283,28 +339,28 @@ const styles = StyleSheet.create({
   // Success state
   successContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     padding: Spacing.xl,
     gap: Spacing.md,
   },
   successEmoji: { fontSize: 72 },
   successTitle: {
     fontSize: Spacing.font.xxl,
-    fontWeight: '900',
+    fontWeight: "900",
     color: Colors.primary,
-    textAlign: 'center',
+    textAlign: "center",
   },
   successSub: {
     fontSize: Spacing.font.md,
     color: Colors.textPrimary,
-    textAlign: 'center',
+    textAlign: "center",
     lineHeight: 24,
   },
   successNote: {
     fontSize: Spacing.font.sm,
     color: Colors.textSecondary,
-    textAlign: 'center',
+    textAlign: "center",
     lineHeight: 20,
   },
 });

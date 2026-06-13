@@ -1,19 +1,19 @@
-import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, FlatList, RefreshControl } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { PRODUCTS } from '../data/products';
-import { useFavorites } from '../context/FavoritesContext';
-import ProductCard from '../components/ProductCard';
-import EmptyState from '../components/EmptyState';
-import { ProductGridSkeleton } from '../components/Skeleton';
-import Colors from '../constants/colors';
-import Spacing from '../constants/spacing';
+import { useState, useCallback } from "react";
+import { View, Text, StyleSheet, FlatList, RefreshControl } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { PRODUCTS } from "../data/products";
+import { useFavorites } from "../context/FavoritesContext";
+import ProductCard from "../components/ProductCard";
+import EmptyState from "../components/EmptyState";
+import { ProductGridSkeleton } from "../components/Skeleton";
+import Colors from "../constants/colors";
+import Spacing from "../constants/spacing";
 
 export default function FavoritesScreen() {
   const { favoriteIds, loading } = useFavorites();
   const [refreshing, setRefreshing] = useState(false);
 
-  const favoriteProducts = PRODUCTS.filter(p => favoriteIds.includes(p.id));
+  const favoriteProducts = PRODUCTS.filter((p) => favoriteIds.includes(p.id));
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -22,11 +22,12 @@ export default function FavoritesScreen() {
   }, []);
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top']}>
+    <SafeAreaView style={styles.safe} edges={["top"]}>
       <View style={styles.header}>
         <Text style={styles.title}>My Favorites</Text>
         <Text style={styles.subtitle}>
-          {favoriteProducts.length} {favoriteProducts.length === 1 ? 'item' : 'items'} saved
+          {favoriteProducts.length}{" "}
+          {favoriteProducts.length === 1 ? "item" : "items"} saved
         </Text>
       </View>
 
@@ -41,13 +42,17 @@ export default function FavoritesScreen() {
       ) : (
         <FlatList
           data={favoriteProducts}
-          keyExtractor={item => item.id}
+          keyExtractor={(item) => item.id}
           numColumns={2}
           renderItem={({ item }) => <ProductCard product={item} />}
           contentContainerStyle={styles.grid}
           showsVerticalScrollIndicator={false}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              tintColor={Colors.primary}
+            />
           }
         />
       )}
@@ -64,7 +69,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: Spacing.font.xxl,
-    fontWeight: '900',
+    fontWeight: "900",
     color: Colors.textPrimary,
   },
   subtitle: {

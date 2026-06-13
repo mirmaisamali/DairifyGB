@@ -1,35 +1,48 @@
-import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, FlatList, RefreshControl, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useOrders } from '../context/OrdersContext';
-import EmptyState from '../components/EmptyState';
-import { SkeletonBox } from '../components/Skeleton';
-import Colors from '../constants/colors';
-import Spacing from '../constants/spacing';
-import { Order, RootStackParamList } from '../types';
-import { formatOrderDate, formatPrice } from '../utils/format';
+import { useState, useCallback } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+  TouchableOpacity,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useOrders } from "../context/OrdersContext";
+import EmptyState from "../components/EmptyState";
+import { SkeletonBox } from "../components/Skeleton";
+import Colors from "../constants/colors";
+import Spacing from "../constants/spacing";
+import { Order, RootStackParamList } from "../types";
+import { formatOrderDate, formatPrice } from "../utils/format";
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList>;
 };
 
-function StatusBadge({ status }: { status: Order['status'] }) {
-  const isDelivered = status === 'Delivered';
+function StatusBadge({ status }: { status: Order["status"] }) {
+  const isDelivered = status === "Delivered";
   return (
-    <View style={[styles.statusBadge, isDelivered ? styles.statusDelivered : styles.statusPending]}>
-      <Text style={[styles.statusText, isDelivered ? styles.statusTextDelivered : styles.statusTextPending]}>
-        {isDelivered ? '📦 Delivered' : '⏳ Pending'}
+    <View
+      style={[
+        styles.statusBadge,
+        isDelivered ? styles.statusDelivered : styles.statusPending,
+      ]}
+    >
+      <Text
+        style={[
+          styles.statusText,
+          isDelivered ? styles.statusTextDelivered : styles.statusTextPending,
+        ]}
+      >
+        {isDelivered ? "📦 Delivered" : "⏳ Pending"}
       </Text>
     </View>
   );
 }
 
 function OrderCard({ order, onPress }: { order: Order; onPress: () => void }) {
-  const itemPreview = order.items
-    .slice(0, 3)
-    .map(i => i.emoji)
-    .join(' ');
   const itemCount = order.items.reduce((sum, i) => sum + i.quantity, 0);
 
   return (
@@ -42,13 +55,24 @@ function OrderCard({ order, onPress }: { order: Order; onPress: () => void }) {
         <StatusBadge status={order.status} />
       </View>
 
-      <View style={styles.cardBody}>
-        <Text style={styles.itemPreview}>{itemPreview}</Text>
-        <Text style={styles.itemCount}>{itemCount} {itemCount === 1 ? 'item' : 'items'}</Text>
+      <View style={styles.cardBodyColumn}>
+        {order.items.map((it) => (
+          <View key={it.productId} style={styles.itemRow}>
+            <Text style={styles.itemEmoji}>{it.emoji}</Text>
+            <Text style={styles.itemName} numberOfLines={1}>
+              {it.name}
+            </Text>
+            <Text style={styles.itemQty}>x {it.quantity}</Text>
+          </View>
+        ))}
       </View>
 
       <View style={styles.cardFooter}>
-        <Text style={styles.totalLabel}>Total</Text>
+        <Text style={styles.totalLabel}>Total Items</Text>
+        <Text style={styles.totalVal}>{itemCount}</Text>
+      </View>
+      <View style={styles.cardFooter}>
+        <Text style={styles.totalLabel}>Total Amount</Text>
         <Text style={styles.totalVal}>{formatPrice(order.grandTotal)}</Text>
       </View>
     </TouchableOpacity>
@@ -65,24 +89,28 @@ export default function OrderHistoryScreen({ navigation }: Props) {
   }, []);
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top']}>
+    <SafeAreaView style={styles.safe} edges={["top"]}>
       <View style={styles.header}>
         <Text style={styles.title}>Order History</Text>
         <Text style={styles.subtitle}>
-          {orders.length} {orders.length === 1 ? 'order' : 'orders'} placed
+          {orders.length} {orders.length === 1 ? "order" : "orders"} placed
         </Text>
       </View>
 
       {loading ? (
         <View style={styles.list}>
-          {[1, 2, 3].map(i => (
+          {[1, 2, 3].map((i) => (
             <View key={i} style={styles.card}>
               <View style={styles.cardHeader}>
                 <View style={{ gap: 6 }}>
                   <SkeletonBox width={120} height={14} />
                   <SkeletonBox width={90} height={10} />
                 </View>
-                <SkeletonBox width={80} height={22} borderRadius={Spacing.radius.full} />
+                <SkeletonBox
+                  width={80}
+                  height={22}
+                  borderRadius={Spacing.radius.full}
+                />
               </View>
               <SkeletonBox width="100%" height={14} />
             </View>
@@ -97,17 +125,23 @@ export default function OrderHistoryScreen({ navigation }: Props) {
       ) : (
         <FlatList
           data={orders}
-          keyExtractor={item => item.id}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <OrderCard
               order={item}
-              onPress={() => navigation.navigate('OrderTracking', { orderId: item.id })}
+              onPress={() =>
+                navigation.navigate("OrderTracking", { orderId: item.id })
+              }
             />
           )}
           contentContainerStyle={styles.list}
           showsVerticalScrollIndicator={false}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.primary} />
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              tintColor={Colors.primary}
+            />
           }
         />
       )}
@@ -122,8 +156,16 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.sm,
     paddingBottom: Spacing.md,
   },
-  title: { fontSize: Spacing.font.xxl, fontWeight: '900', color: Colors.textPrimary },
-  subtitle: { fontSize: Spacing.font.sm, color: Colors.textSecondary, marginTop: 2 },
+  title: {
+    fontSize: Spacing.font.xxl,
+    fontWeight: "900",
+    color: Colors.textPrimary,
+  },
+  subtitle: {
+    fontSize: Spacing.font.sm,
+    color: Colors.textSecondary,
+    marginTop: 2,
+  },
   list: { paddingHorizontal: Spacing.md, paddingBottom: 24, gap: Spacing.sm },
   card: {
     backgroundColor: Colors.card,
@@ -134,37 +176,76 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
   },
   cardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
   },
-  orderId: { fontSize: Spacing.font.md, fontWeight: '800', color: Colors.textPrimary },
-  orderDate: { fontSize: Spacing.font.xs, color: Colors.textMuted, marginTop: 2 },
+  orderId: {
+    fontSize: Spacing.font.md,
+    fontWeight: "800",
+    color: Colors.textPrimary,
+  },
+  orderDate: {
+    fontSize: Spacing.font.xs,
+    color: Colors.textMuted,
+    marginTop: 2,
+  },
   statusBadge: {
     borderRadius: Spacing.radius.full,
     paddingVertical: 4,
     paddingHorizontal: 10,
   },
-  statusPending: { backgroundColor: '#FEF3C7', borderWidth: 1, borderColor: '#F59E0B' },
-  statusDelivered: { backgroundColor: Colors.primaryLight, borderWidth: 1, borderColor: Colors.primary },
-  statusText: { fontSize: Spacing.font.xs, fontWeight: '700' },
-  statusTextPending: { color: '#B45309' },
-  statusTextDelivered: { color: Colors.primaryDark },
-  cardBody: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  statusPending: {
+    backgroundColor: "#FEF3C7",
+    borderWidth: 1,
+    borderColor: "#F59E0B",
   },
-  itemPreview: { fontSize: 22 },
-  itemCount: { fontSize: Spacing.font.sm, color: Colors.textSecondary, fontWeight: '500' },
+  statusDelivered: {
+    backgroundColor: Colors.primaryLight,
+    borderWidth: 1,
+    borderColor: Colors.primary,
+  },
+  statusText: { fontSize: Spacing.font.xs, fontWeight: "700" },
+  statusTextPending: { color: "#B45309" },
+  statusTextDelivered: { color: Colors.primaryDark },
+  cardBodyColumn: {
+    flexDirection: "column",
+    gap: Spacing.xs,
+  },
+  itemRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+  },
+  itemEmoji: { fontSize: 20 },
+  itemName: {
+    flex: 1,
+    fontSize: Spacing.font.md,
+    color: Colors.textPrimary,
+  },
+  itemCount: {
+    fontSize: Spacing.font.sm,
+    color: Colors.textSecondary,
+    fontWeight: "500",
+  },
+  itemQty: {
+    fontSize: Spacing.font.sm,
+    color: Colors.textSecondary,
+    fontWeight: "700",
+    marginLeft: Spacing.sm,
+  },
   cardFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     borderTopWidth: 1,
     borderTopColor: Colors.borderLight,
     paddingTop: Spacing.sm,
   },
   totalLabel: { fontSize: Spacing.font.sm, color: Colors.textSecondary },
-  totalVal: { fontSize: Spacing.font.lg, fontWeight: '800', color: Colors.primary },
+  totalVal: {
+    fontSize: Spacing.font.lg,
+    fontWeight: "800",
+    color: Colors.primary,
+  },
 });

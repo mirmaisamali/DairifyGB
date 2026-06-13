@@ -1,7 +1,12 @@
-import React from 'react';
-import { View, TextInput, StyleSheet, TouchableOpacity, Text } from 'react-native';
-import Colors from '../constants/colors';
-import Spacing from '../constants/spacing';
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+} from "react-native";
+import Colors from "../constants/colors";
+import Spacing from "../constants/spacing";
 
 interface SearchBarProps {
   value: string;
@@ -14,7 +19,7 @@ interface SearchBarProps {
 export default function SearchBar({
   value,
   onChangeText,
-  placeholder = 'Search products...',
+  placeholder = "Search products...",
   onFilterPress,
   filterActive = false,
 }: SearchBarProps) {
@@ -31,7 +36,10 @@ export default function SearchBar({
           returnKeyType="search"
         />
         {value.length > 0 && (
-          <TouchableOpacity onPress={() => onChangeText('')} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+          <TouchableOpacity
+            onPress={() => onChangeText("")}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
             <Text style={styles.clearIcon}>✕</Text>
           </TouchableOpacity>
         )}
@@ -52,16 +60,16 @@ export default function SearchBar({
 
 const styles = StyleSheet.create({
   row: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: Spacing.sm,
     paddingHorizontal: Spacing.md,
     marginBottom: Spacing.sm,
   },
   searchWrapper: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: Colors.card,
     borderRadius: Spacing.radius.full,
     borderWidth: 1.5,
@@ -76,7 +84,7 @@ const styles = StyleSheet.create({
     fontSize: Spacing.font.sm,
     color: Colors.textPrimary,
   },
-  clearIcon: { fontSize: 14, color: Colors.textMuted, fontWeight: '700' },
+  clearIcon: { fontSize: 14, color: Colors.textMuted, fontWeight: "700" },
   filterBtn: {
     width: 46,
     height: 46,
@@ -84,8 +92,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.card,
     borderWidth: 1.5,
     borderColor: Colors.border,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   filterBtnActive: {
     backgroundColor: Colors.primaryLight,

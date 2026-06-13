@@ -1,6 +1,12 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { CartItem, Product } from '../types';
-import { getItem, setItem, STORAGE_KEYS } from '../services/storageService';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { CartItem, Product } from "../types";
+import { getItem, setItem, STORAGE_KEYS } from "../services/storageService";
 
 interface CartContextValue {
   items: CartItem[];
@@ -35,13 +41,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [items, loading]);
 
   const addToCart = (product: Product) => {
-    setItems(prev => {
-      const existing = prev.find(i => i.product.id === product.id);
+    setItems((prev) => {
+      const existing = prev.find((i) => i.product.id === product.id);
       if (existing) {
-        return prev.map(i =>
-          i.product.id === product.id
-            ? { ...i, quantity: i.quantity + 1 }
-            : i
+        return prev.map((i) =>
+          i.product.id === product.id ? { ...i, quantity: i.quantity + 1 } : i,
         );
       }
       return [...prev, { product, quantity: 1 }];
@@ -49,18 +53,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const removeFromCart = (productId: string) => {
-    setItems(prev => prev.filter(i => i.product.id !== productId));
+    setItems((prev) => prev.filter((i) => i.product.id !== productId));
   };
 
   const updateQuantity = (productId: string, delta: number) => {
-    setItems(prev =>
+    setItems((prev) =>
       prev
-        .map(i =>
+        .map((i) =>
           i.product.id === productId
             ? { ...i, quantity: i.quantity + delta }
-            : i
+            : i,
         )
-        .filter(i => i.quantity > 0)
+        .filter((i) => i.quantity > 0),
     );
   };
 
@@ -69,7 +73,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
   const totalPrice = items.reduce(
     (sum, i) => sum + i.product.price * i.quantity,
-    0
+    0,
   );
 
   return (
@@ -92,6 +96,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
 export function useCart(): CartContextValue {
   const ctx = useContext(CartContext);
-  if (!ctx) throw new Error('useCart must be used inside CartProvider');
+  if (!ctx) throw new Error("useCart must be used inside CartProvider");
   return ctx;
 }

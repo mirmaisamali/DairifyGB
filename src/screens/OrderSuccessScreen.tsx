@@ -1,26 +1,26 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RouteProp } from '@react-navigation/native';
-import Button from '../components/Button';
-import Colors from '../constants/colors';
-import Spacing from '../constants/spacing';
-import { RootStackParamList } from '../types';
-import { useOrders } from '../context/OrdersContext';
+import { View, Text, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RouteProp } from "@react-navigation/native";
+import Button from "../components/Button";
+import Colors from "../constants/colors";
+import Spacing from "../constants/spacing";
+import { RootStackParamList } from "../types";
+import { useOrders } from "../context/OrdersContext";
 
 type Props = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'OrderSuccess'>;
-  route: RouteProp<RootStackParamList, 'OrderSuccess'>;
+  navigation: NativeStackNavigationProp<RootStackParamList, "OrderSuccess">;
+  route: RouteProp<RootStackParamList, "OrderSuccess">;
 };
 
 export default function OrderSuccessScreen({ navigation, route }: Props) {
   const { orderId } = route.params;
   const { orders } = useOrders();
-  const order = orders.find(o => o.id === orderId);
-  const paymentLabel = order?.paymentMethod === 'card' ? 'Card / Wallet' : 'Cash on Delivery';
+  const order = orders.find((o) => o.id === orderId);
+  const paymentLabel =
+    order?.paymentMethod === "card" ? "Card / Wallet" : "Cash on Delivery";
   return (
-    <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
+    <SafeAreaView style={styles.safe} edges={["top", "bottom"]}>
       <View style={styles.container}>
         {/* Animated checkmark ring */}
         <View style={styles.iconOuter}>
@@ -31,7 +31,7 @@ export default function OrderSuccessScreen({ navigation, route }: Props) {
           </View>
         </View>
 
-        <Text style={styles.title}>Order Placed{'\n'}Successfully 🎉</Text>
+        <Text style={styles.title}>Order Placed{"\n"}Successfully 🎉</Text>
         <Text style={styles.subtitle}>
           Your fresh dairy items are on the way from Gilgit.
         </Text>
@@ -71,12 +71,12 @@ export default function OrderSuccessScreen({ navigation, route }: Props) {
         <View style={styles.actions}>
           <Button
             label="Track Order 🗺️"
-            onPress={() => navigation.navigate('OrderTracking', { orderId })}
+            onPress={() => navigation.navigate("OrderTracking", { orderId })}
             size="lg"
           />
           <Button
             label="Back to Shop"
-            onPress={() => navigation.navigate('Main')}
+            onPress={() => navigation.navigate("Main")}
             variant="outline"
             size="lg"
           />
@@ -90,8 +90,8 @@ const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.background },
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingHorizontal: Spacing.lg,
     gap: Spacing.md,
   },
@@ -99,38 +99,38 @@ const styles = StyleSheet.create({
     width: 130,
     height: 130,
     borderRadius: 65,
-    backgroundColor: 'rgba(34,197,94,0.08)',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "rgba(34,197,94,0.08)",
+    alignItems: "center",
+    justifyContent: "center",
   },
   iconMiddle: {
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: 'rgba(34,197,94,0.15)',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "rgba(34,197,94,0.15)",
+    alignItems: "center",
+    justifyContent: "center",
   },
   iconInner: {
     width: 76,
     height: 76,
     borderRadius: 38,
     backgroundColor: Colors.primaryLight,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   checkEmoji: { fontSize: 40 },
   title: {
     fontSize: Spacing.font.xxl + 2,
-    fontWeight: '900',
+    fontWeight: "900",
     color: Colors.textPrimary,
-    textAlign: 'center',
+    textAlign: "center",
     lineHeight: 34,
   },
   subtitle: {
     fontSize: Spacing.font.md,
     color: Colors.textSecondary,
-    textAlign: 'center',
+    textAlign: "center",
     lineHeight: 22,
     marginTop: -4,
   },
@@ -142,20 +142,33 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.primary,
   },
-  orderBadgeText: { fontSize: Spacing.font.sm, fontWeight: '700', color: Colors.primaryDark },
+  orderBadgeText: {
+    fontSize: Spacing.font.sm,
+    fontWeight: "700",
+    color: Colors.primaryDark,
+  },
   detailsCard: {
     backgroundColor: Colors.card,
     borderRadius: Spacing.radius.lg,
     padding: Spacing.md,
     borderWidth: 1,
     borderColor: Colors.border,
-    width: '100%',
+    width: "100%",
     gap: Spacing.sm,
   },
-  detailRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm },
-  detailIcon: { fontSize: 24, width: 36, textAlign: 'center' },
-  detailLabel: { fontSize: Spacing.font.xs, color: Colors.textMuted, fontWeight: '500' },
-  detailVal: { fontSize: Spacing.font.sm, color: Colors.textPrimary, fontWeight: '700', marginTop: 2 },
+  detailRow: { flexDirection: "row", alignItems: "center", gap: Spacing.sm },
+  detailIcon: { fontSize: 24, width: 36, textAlign: "center" },
+  detailLabel: {
+    fontSize: Spacing.font.xs,
+    color: Colors.textMuted,
+    fontWeight: "500",
+  },
+  detailVal: {
+    fontSize: Spacing.font.sm,
+    color: Colors.textPrimary,
+    fontWeight: "700",
+    marginTop: 2,
+  },
   detailDivider: { height: 1, backgroundColor: Colors.borderLight },
-  actions: { width: '100%', gap: Spacing.sm, marginTop: Spacing.sm },
+  actions: { width: "100%", gap: Spacing.sm, marginTop: Spacing.sm },
 });
