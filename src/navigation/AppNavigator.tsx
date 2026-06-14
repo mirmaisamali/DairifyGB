@@ -1,12 +1,12 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TabNavigator from "./TabNavigator";
-import SplashScreen from "../screens/SplashScreen";
-import LoginScreen from "../screens/LoginScreen";
-import OrderSuccessScreen from "../screens/OrderSuccessScreen";
-import OrderTrackingScreen from "../screens/OrderTrackingScreen";
-import { RootStackParamList } from "../types";
-import Colors from "../constants/colors";
+import SplashScreen from "@/screens/SplashScreen";
+import LoginScreen from "@/screens/LoginScreen";
+import OrderSuccessScreen from "@/screens/OrderSuccessScreen";
+import OrderTrackingScreen from "@/screens/OrderTrackingScreen";
+import { RootStackParamList } from "@/types";
+import Colors from "@/constants/colors";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

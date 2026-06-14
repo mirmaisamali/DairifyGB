@@ -1,4 +1,4 @@
-import { Product, SubscriptionOption } from "../types";
+import { Product, SubscriptionOption } from "@/types";
 import productsData from "./products.json";
 
 export const PRODUCTS: Product[] = productsData.products as Product[];

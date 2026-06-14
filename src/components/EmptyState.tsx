@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
-import Colors from "../constants/colors";
-import Spacing from "../constants/spacing";
+import Colors from "@/constants/colors";
+import Spacing from "@/constants/spacing";
 import Button from "./Button";
 
 interface EmptyStateProps {

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Animated, ViewStyle } from "react-native";
-import Colors from "../constants/colors";
+import Colors from "@/constants/colors";
 
 interface SkeletonBoxProps {
   width?: number | string;

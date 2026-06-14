@@ -5,7 +5,7 @@ import {
   useEffect,
   ReactNode,
 } from "react";
-import { getItem, setItem, STORAGE_KEYS } from "../services/storageService";
+import { getItem, setItem, STORAGE_KEYS } from "@/services/storageService";
 
 interface FavoritesContextValue {
   favoriteIds: string[];

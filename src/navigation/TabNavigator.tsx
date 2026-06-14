@@ -1,13 +1,13 @@
 import { StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import ShopScreen from "../screens/ShopScreen";
-import SubscriptionScreen from "../screens/SubscriptionScreen";
-import FavoritesScreen from "../screens/FavoritesScreen";
-import CartScreen from "../screens/CartScreen";
-import OrderHistoryScreen from "../screens/OrderHistoryScreen";
-import Colors from "../constants/colors";
-import { MainTabParamList, RootStackParamList } from "../types";
+import ShopScreen from "@/screens/ShopScreen";
+import SubscriptionScreen from "@/screens/SubscriptionScreen";
+import FavoritesScreen from "@/screens/FavoritesScreen";
+import CartScreen from "@/screens/CartScreen";
+import OrderHistoryScreen from "@/screens/OrderHistoryScreen";
+import Colors from "@/constants/colors";
+import { MainTabParamList, RootStackParamList } from "@/types";
 import TabIcon from "./TabIcon";
 import CartTabIcon from "./CartTabIcon";
 

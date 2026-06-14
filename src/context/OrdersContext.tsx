@@ -5,8 +5,8 @@ import {
   useEffect,
   ReactNode,
 } from "react";
-import { Order, OrderStatus } from "../types";
-import { getItem, setItem, STORAGE_KEYS } from "../services/storageService";
+import { Order, OrderStatus } from "@/types";
+import { getItem, setItem, STORAGE_KEYS } from "@/services/storageService";
 
 interface OrdersContextValue {
   orders: Order[];

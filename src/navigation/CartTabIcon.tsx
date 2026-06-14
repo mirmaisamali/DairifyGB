@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
-import { useCart } from "../context/CartContext";
-import Colors from "../constants/colors";
-import Spacing from "../constants/spacing";
+import { useCart } from "@/context/CartContext";
+import Colors from "@/constants/colors";
+import Spacing from "@/constants/spacing";
 
 const CartTabIcon = ({ focused }: { focused: boolean }) => {
   const { totalItems } = useCart();
