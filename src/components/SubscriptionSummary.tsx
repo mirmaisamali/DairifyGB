@@ -47,31 +47,26 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.lg,
     gap: Spacing.sm,
   },
-
   summaryTitle: {
     fontSize: Spacing.font.md,
     fontWeight: "800",
     color: Colors.textPrimary,
     marginBottom: 4,
   },
-
   summaryRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-
   summaryKey: {
     fontSize: Spacing.font.sm,
     color: Colors.textSecondary,
   },
-
   summaryVal: {
     fontSize: Spacing.font.sm,
     fontWeight: "700",
     color: Colors.textPrimary,
   },
-
   divider: {
     height: 1,
     backgroundColor: Colors.borderLight,
