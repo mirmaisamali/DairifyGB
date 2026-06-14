@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 import SkeletonBox from "./SkeletonBox";
-import Colors from "../constants/colors";
-import Spacing from "../constants/spacing";
+import Colors from "@/constants/colors";
+import Spacing from "@/constants/spacing";
 
 const ProductCardSkeleton = () => {
   return (

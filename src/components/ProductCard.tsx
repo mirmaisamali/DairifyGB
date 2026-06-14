@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { Product } from "../types";
-import { useCart } from "../context/CartContext";
-import { useFavorites } from "../context/FavoritesContext";
-import Colors from "../constants/colors";
-import Spacing from "../constants/spacing";
+import { Product } from "@/types";
+import { useCart } from "@/context/CartContext";
+import { useFavorites } from "@/context/FavoritesContext";
+import Colors from "@/constants/colors";
+import Spacing from "@/constants/spacing";
 
 interface ProductCardProps {
   product: Product;

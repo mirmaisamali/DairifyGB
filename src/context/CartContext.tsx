@@ -5,8 +5,8 @@ import {
   useEffect,
   ReactNode,
 } from "react";
-import { CartItem, Product } from "../types";
-import { getItem, setItem, STORAGE_KEYS } from "../services/storageService";
+import { CartItem, Product } from "@/types";
+import { getItem, setItem, STORAGE_KEYS } from "@/services/storageService";
 
 interface CartContextValue {
   items: CartItem[];

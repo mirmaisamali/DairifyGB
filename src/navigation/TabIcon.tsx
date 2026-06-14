@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
-import Colors from "../constants/colors";
-import Spacing from "../constants/spacing";
+import Colors from "@/constants/colors";
+import Spacing from "@/constants/spacing";
 
 interface IProps {
   emoji: string;

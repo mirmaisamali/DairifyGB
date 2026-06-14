@@ -1,5 +1,5 @@
-import { Product, Category } from "../types";
-import productsData from "../data/products.json";
+import { Product, Category } from "@/types";
+import productsData from "@/data/products.json";
 
 const ALL_PRODUCTS: Product[] = productsData.products as Product[];
 
