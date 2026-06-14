@@ -118,12 +118,6 @@ export default function ShopScreen() {
       {/* Product Grid */}
       {loading ? (
         <ProductGridSkeleton count={4} />
-      ) : products.length === 0 ? (
-        <EmptyState
-          emoji="🔍"
-          title="No products found"
-          subtitle="Try adjusting your search term or price filters."
-        />
       ) : (
         <FlatList
           data={products}
@@ -133,6 +127,13 @@ export default function ShopScreen() {
           contentContainerStyle={styles.grid}
           showsVerticalScrollIndicator={false}
           columnWrapperStyle={styles.columnWrapper}
+          ListEmptyComponent={
+            <EmptyState
+              emoji="🔍"
+              title="No products found"
+              subtitle="Try adjusting your search term or price filters."
+            />
+          }
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
