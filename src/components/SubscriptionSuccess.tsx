@@ -51,25 +51,21 @@ const styles = StyleSheet.create({
     padding: Spacing.xl,
     gap: Spacing.md,
   },
-
   successEmoji: {
     fontSize: 72,
   },
-
   successTitle: {
     fontSize: Spacing.font.xxl,
     fontWeight: "900",
     color: Colors.primary,
     textAlign: "center",
   },
-
   successSub: {
     fontSize: Spacing.font.md,
     color: Colors.textPrimary,
     textAlign: "center",
     lineHeight: 24,
   },
-
   successNote: {
     fontSize: Spacing.font.sm,
     color: Colors.textSecondary,
