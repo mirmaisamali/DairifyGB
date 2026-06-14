@@ -55,13 +55,11 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
     marginTop: Spacing.sm,
   },
-
   durationRow: {
     flexDirection: "row",
     gap: Spacing.sm,
     marginBottom: Spacing.lg,
   },
-
   durationChip: {
     flex: 1,
     paddingVertical: 14,
@@ -71,18 +69,15 @@ const styles = StyleSheet.create({
     borderColor: Colors.border,
     backgroundColor: Colors.card,
   },
-
   durationChipActive: {
     backgroundColor: Colors.primary,
     borderColor: Colors.primary,
   },
-
   durationText: {
     fontSize: Spacing.font.md,
     fontWeight: "700",
     color: Colors.textSecondary,
   },
-
   durationTextActive: {
     color: Colors.white,
   },

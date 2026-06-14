@@ -90,12 +90,10 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
     marginTop: Spacing.sm,
   },
-
   optionsList: {
     gap: Spacing.sm,
     marginBottom: Spacing.lg,
   },
-
   optionCard: {
     backgroundColor: Colors.card,
     borderRadius: Spacing.radius.lg,
@@ -106,19 +104,16 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: Colors.border,
   },
-
   optionCardActive: {
     borderColor: Colors.primary,
     backgroundColor: Colors.surface,
   },
-
   optionLeft: {
     flexDirection: "row",
     alignItems: "center",
     flex: 1,
     gap: Spacing.sm,
   },
-
   optionIconWrapper: {
     width: 48,
     height: 48,
@@ -127,62 +122,50 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
   optionIconWrapperActive: {
     backgroundColor: Colors.primaryLight,
   },
-
   optionIcon: {
     fontSize: 24,
   },
-
   optionText: {
     flex: 1,
   },
-
   optionLabel: {
     fontSize: Spacing.font.md,
     fontWeight: "700",
     color: Colors.textPrimary,
   },
-
   optionLabelActive: {
     color: Colors.primaryDark,
   },
-
   optionDesc: {
     fontSize: Spacing.font.xs,
     color: Colors.textSecondary,
     marginTop: 2,
     lineHeight: 16,
   },
-
   optionRight: {
     alignItems: "flex-end",
     gap: 8,
   },
-
   savingsBadge: {
     backgroundColor: Colors.borderLight,
     borderRadius: Spacing.radius.full,
     paddingVertical: 3,
     paddingHorizontal: 8,
   },
-
   savingsBadgeActive: {
     backgroundColor: Colors.primaryLight,
   },
-
   savingsText: {
     fontSize: Spacing.font.xs,
     fontWeight: "600",
     color: Colors.textMuted,
   },
-
   savingsTextActive: {
     color: Colors.primary,
   },
-
   radio: {
     width: 20,
     height: 20,
@@ -192,11 +175,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
   radioActive: {
     borderColor: Colors.primary,
   },
-
   radioInner: {
     width: 10,
     height: 10,

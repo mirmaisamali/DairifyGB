@@ -1,12 +1,9 @@
 import { useState } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import Button from "../components/Button";
-
 import Colors from "../constants/colors";
 import Spacing from "../constants/spacing";
-
 import {
   SubscriptionFrequency,
   SubscriptionDuration as DurationType,
@@ -90,33 +87,27 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
   },
-
   container: {
     padding: Spacing.md,
     paddingBottom: Spacing.xxl,
   },
-
   header: {
     marginBottom: Spacing.lg,
   },
-
   title: {
     fontSize: Spacing.font.xxl,
     fontWeight: "900",
     color: Colors.textPrimary,
   },
-
   subtitle: {
     fontSize: Spacing.font.sm,
     color: Colors.textSecondary,
     marginTop: 4,
     lineHeight: 20,
   },
-
   ctaBtn: {
     marginBottom: Spacing.md,
   },
-
   note: {
     textAlign: "center",
     fontSize: Spacing.font.xs,
