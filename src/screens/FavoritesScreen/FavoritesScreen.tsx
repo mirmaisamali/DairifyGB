@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { View, Text, StyleSheet, FlatList, RefreshControl } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { PRODUCTS } from "@/data/products";
 import { useFavorites } from "@/context/FavoritesContext";
 import ProductCard from "@/components/ProductCard";
@@ -8,8 +9,13 @@ import EmptyState from "@/components/EmptyState";
 import Colors from "@/constants/colors";
 import Spacing from "@/constants/spacing";
 import ProductGridSkeleton from "@/components/Skeleton";
+import { RootStackParamList } from "@/types";
 
-const FavoritesScreen = () => {
+type Props = {
+  navigation: NativeStackNavigationProp<RootStackParamList>;
+};
+
+const FavoritesScreen = ({ navigation }: Props) => {
   const { favoriteIds, loading } = useFavorites();
   const [refreshing, setRefreshing] = useState(false);
 
@@ -44,7 +50,14 @@ const FavoritesScreen = () => {
           data={favoriteProducts}
           keyExtractor={(item) => item.id}
           numColumns={2}
-          renderItem={({ item }) => <ProductCard product={item} />}
+          renderItem={({ item }) => (
+            <ProductCard
+              product={item}
+              onPress={() =>
+                navigation.navigate("ProductDetail", { productId: item.id })
+              }
+            />
+          )}
           contentContainerStyle={styles.grid}
           showsVerticalScrollIndicator={false}
           refreshControl={

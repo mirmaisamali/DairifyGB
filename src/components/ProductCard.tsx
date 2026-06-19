@@ -7,9 +7,10 @@ import Spacing from "@/constants/spacing";
 
 interface ProductCardProps {
   product: Product;
+  onPress?: () => void;
 }
 
-const ProductCard = ({ product }: ProductCardProps) => {
+const ProductCard = ({ product, onPress }: ProductCardProps) => {
   const { items, addToCart, updateQuantity } = useCart();
   const { isFavorite, toggleFavorite } = useFavorites();
   const cartItem = items.find((i) => i.product.id === product.id);
@@ -18,28 +19,36 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   return (
     <View style={styles.card}>
-      {/* Emoji placeholder (replace with <Image> later) */}
-      <View style={styles.imagePlaceholder}>
-        <Text style={styles.emojiLarge}>{product.emoji}</Text>
-        <TouchableOpacity
-          style={styles.favoriteBtn}
-          onPress={() => toggleFavorite(product.id)}
-          activeOpacity={0.8}
-          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-        >
-          <Text style={styles.favoriteIcon}>{favorite ? "❤️" : "🤍"}</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        onPress={onPress}
+        activeOpacity={onPress ? 0.85 : 1}
+        disabled={!onPress}
+      >
+        {/* Emoji placeholder (replace with <Image> later) */}
+        <View style={styles.imagePlaceholder}>
+          <Text style={styles.emojiLarge}>{product.emoji}</Text>
+          <TouchableOpacity
+            style={styles.favoriteBtn}
+            onPress={() => toggleFavorite(product.id)}
+            activeOpacity={0.8}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            <Text style={styles.favoriteIcon}>{favorite ? "❤️" : "🤍"}</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.bodyTop}>
+          <Text style={styles.name} numberOfLines={2}>
+            {product.name}
+          </Text>
+          <Text style={styles.unit}>{product.unit}</Text>
+          <Text style={styles.description} numberOfLines={2}>
+            {product.description}
+          </Text>
+        </View>
+      </TouchableOpacity>
 
       <View style={styles.body}>
-        <Text style={styles.name} numberOfLines={2}>
-          {product.name}
-        </Text>
-        <Text style={styles.unit}>{product.unit}</Text>
-        <Text style={styles.description} numberOfLines={2}>
-          {product.description}
-        </Text>
-
         <View style={styles.footer}>
           <Text style={styles.price}>Rs {product.price}</Text>
 
@@ -110,7 +119,8 @@ const styles = StyleSheet.create({
   },
   favoriteIcon: { fontSize: 16 },
   emojiLarge: { fontSize: 52 },
-  body: { padding: Spacing.sm + 4 },
+  bodyTop: { padding: Spacing.sm + 4, paddingBottom: 0 },
+  body: { padding: Spacing.sm + 4, paddingTop: Spacing.sm },
   name: {
     fontSize: Spacing.font.md,
     fontWeight: "700",

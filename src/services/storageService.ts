@@ -8,6 +8,8 @@ export const STORAGE_KEYS = {
   CART: "@dairifygb/cart",
   FAVORITES: "@dairifygb/favorites",
   ORDERS: "@dairifygb/orders",
+  SUBSCRIPTION: "@dairifygb/subscription",
+  USER_PREFERENCES: "@dairifygb/user-preferences",
 } as const;
 
 /**

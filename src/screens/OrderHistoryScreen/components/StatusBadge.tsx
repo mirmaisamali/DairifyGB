@@ -1,28 +1,41 @@
 import { StyleSheet, Text, View } from "react-native";
-import { Order } from "@/types";
+import { OrderStatus } from "@/types";
 import Colors from "@/constants/colors";
 import Spacing from "@/constants/spacing";
+import { getOrderStatusLabel, normalizeOrderStatus } from "@/utils/orderStatus";
 
 interface IProps {
-  status: Order["status"];
+  status: OrderStatus;
 }
 
 const StatusBadge = ({ status }: IProps) => {
-  const isDelivered = status === "Delivered";
+  const normalized = normalizeOrderStatus(status);
+  const isDelivered = normalized === "Delivered";
+  const isInTransit =
+    normalized === "OutForDelivery" || normalized === "Packed";
+
   return (
     <View
       style={[
         styles.statusBadge,
-        isDelivered ? styles.statusDelivered : styles.statusPending,
+        isDelivered
+          ? styles.statusDelivered
+          : isInTransit
+            ? styles.statusTransit
+            : styles.statusPending,
       ]}
     >
       <Text
         style={[
           styles.statusText,
-          isDelivered ? styles.statusTextDelivered : styles.statusTextPending,
+          isDelivered
+            ? styles.statusTextDelivered
+            : isInTransit
+              ? styles.statusTextTransit
+              : styles.statusTextPending,
         ]}
       >
-        {isDelivered ? "📦 Delivered" : "⏳ Pending"}
+        {getOrderStatusLabel(status)}
       </Text>
     </View>
   );
@@ -40,6 +53,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#F59E0B",
   },
+  statusTransit: {
+    backgroundColor: "#DBEAFE",
+    borderWidth: 1,
+    borderColor: "#3B82F6",
+  },
   statusDelivered: {
     backgroundColor: Colors.primaryLight,
     borderWidth: 1,
@@ -47,5 +65,6 @@ const styles = StyleSheet.create({
   },
   statusText: { fontSize: Spacing.font.xs, fontWeight: "700" },
   statusTextPending: { color: "#B45309" },
+  statusTextTransit: { color: "#1D4ED8" },
   statusTextDelivered: { color: Colors.primaryDark },
 });

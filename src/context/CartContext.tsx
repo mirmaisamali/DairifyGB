@@ -12,6 +12,7 @@ interface CartContextValue {
   items: CartItem[];
   loading: boolean;
   addToCart: (product: Product) => void;
+  addItemsToCart: (entries: { product: Product; quantity: number }[]) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, delta: number) => void;
   clearCart: () => void;
@@ -52,6 +53,27 @@ const CartProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
+  const addItemsToCart = (
+    entries: { product: Product; quantity: number }[],
+  ) => {
+    setItems((prev) => {
+      const next = [...prev];
+      for (const { product, quantity } of entries) {
+        if (quantity <= 0) continue;
+        const idx = next.findIndex((i) => i.product.id === product.id);
+        if (idx >= 0) {
+          next[idx] = {
+            ...next[idx],
+            quantity: next[idx].quantity + quantity,
+          };
+        } else {
+          next.push({ product, quantity });
+        }
+      }
+      return next;
+    });
+  };
+
   const removeFromCart = (productId: string) => {
     setItems((prev) => prev.filter((i) => i.product.id !== productId));
   };
@@ -82,6 +104,7 @@ const CartProvider = ({ children }: { children: ReactNode }) => {
         items,
         loading,
         addToCart,
+        addItemsToCart,
         removeFromCart,
         updateQuantity,
         clearCart,

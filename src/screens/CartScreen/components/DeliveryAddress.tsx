@@ -1,17 +1,22 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import Colors from "@/constants/colors";
 import Spacing from "@/constants/spacing";
-import { Dispatch, SetStateAction } from "react";
 
 interface IProps {
   address: string;
-  setAddress: Dispatch<SetStateAction<string>>;
+  setAddress: (value: string) => void;
+  savedHint?: boolean;
 }
 
-const DeliveryAddress = ({ address, setAddress }: IProps) => {
+const DeliveryAddress = ({ address, setAddress, savedHint }: IProps) => {
   return (
     <View style={styles.section}>
-      <Text style={styles.sectionTitle}>Delivery Address</Text>
+      <View style={styles.titleRow}>
+        <Text style={styles.sectionTitle}>Delivery Address</Text>
+        {savedHint && address.trim().length > 0 && (
+          <Text style={styles.savedBadge}>💾 Saved</Text>
+        )}
+      </View>
       <TextInput
         style={styles.addressInput}
         placeholder="Enter your full delivery address..."
@@ -30,11 +35,21 @@ export default DeliveryAddress;
 
 const styles = StyleSheet.create({
   section: { marginBottom: Spacing.md },
+  titleRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: Spacing.sm,
+  },
   sectionTitle: {
     fontSize: Spacing.font.md,
     fontWeight: "800",
     color: Colors.textPrimary,
-    marginBottom: Spacing.sm,
+  },
+  savedBadge: {
+    fontSize: Spacing.font.xs,
+    color: Colors.primary,
+    fontWeight: "700",
   },
   addressInput: {
     backgroundColor: Colors.card,

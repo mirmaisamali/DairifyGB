@@ -34,7 +34,7 @@ const STEPS = [
 ];
 
 interface IProps {
-  currentStep: 3 | 4; // 3 = Out for delivery, 4 = Delivered
+  currentStep: 1 | 2 | 3 | 4;
 }
 
 const ProgressSteps = ({ currentStep }: IProps) => {

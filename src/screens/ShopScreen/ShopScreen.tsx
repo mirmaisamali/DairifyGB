@@ -1,7 +1,15 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { View, Text, StyleSheet, FlatList, RefreshControl } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+  TouchableOpacity,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Category, Product } from "@/types";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { Category, Product, RootStackParamList } from "@/types";
 import CategoryTabs from "./components/CategoryTabs";
 import ProductCard from "@/components/ProductCard";
 import SearchBar from "./components/SearchBar";
@@ -15,7 +23,11 @@ import ProductGridSkeleton from "@/components/Skeleton";
 
 const priceBounds = getPriceBounds();
 
-export default function ShopScreen() {
+type Props = {
+  navigation: NativeStackNavigationProp<RootStackParamList>;
+};
+
+export default function ShopScreen({ navigation }: Props) {
   const [selectedCategory, setSelectedCategory] = useState<Category>("Milk");
   const [searchQuery, setSearchQuery] = useState("");
   const [minPrice, setMinPrice] = useState<number | undefined>(undefined);
@@ -123,7 +135,14 @@ export default function ShopScreen() {
           data={products}
           keyExtractor={(item) => item.id}
           numColumns={2}
-          renderItem={({ item }) => <ProductCard product={item} />}
+          renderItem={({ item }) => (
+            <ProductCard
+              product={item}
+              onPress={() =>
+                navigation.navigate("ProductDetail", { productId: item.id })
+              }
+            />
+          )}
           contentContainerStyle={styles.grid}
           showsVerticalScrollIndicator={false}
           columnWrapperStyle={styles.columnWrapper}
@@ -146,15 +165,19 @@ export default function ShopScreen() {
 
       {/* Floating Cart Bar */}
       {totalItems > 0 && (
-        <View style={styles.cartBar}>
+        <TouchableOpacity
+          style={styles.cartBar}
+          onPress={() => navigation.navigate("Main", { screen: "Cart" })}
+          activeOpacity={0.9}
+        >
           <View style={styles.cartInfo}>
             <View style={styles.cartBadge}>
               <Text style={styles.cartBadgeText}>{totalItems}</Text>
             </View>
-            <Text style={styles.cartLabel}>Items in cart</Text>
+            <Text style={styles.cartLabel}>View Cart →</Text>
           </View>
           <Text style={styles.cartTotal}>Rs {totalPrice.toLocaleString()}</Text>
-        </View>
+        </TouchableOpacity>
       )}
 
       {/* Price Filter Modal */}
