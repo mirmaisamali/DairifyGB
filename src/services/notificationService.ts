@@ -66,6 +66,30 @@ export function notifyOrderPlaced(orderId: string): Promise<void> {
   );
 }
 
+/** Status update notifications during delivery lifecycle. */
+export function notifyOrderStatusUpdate(
+  orderId: string,
+  status: string,
+): Promise<void> {
+  const messages: Record<string, string> = {
+    Packed: `Order #${orderId} has been packed and is ready to ship.`,
+    OutForDelivery: `Order #${orderId} is on its way to you!`,
+    Delivered: "Your fresh dairy order has been delivered. Enjoy!",
+  };
+  const body = messages[status] ?? `Order #${orderId} status updated.`;
+  return sendLocalNotification(`Order Update — ${status}`, body);
+}
+
+/** Subscription activated notification. */
+export function notifySubscriptionActivated(
+  frequency: string,
+): Promise<void> {
+  return sendLocalNotification(
+    "Subscription Active 🎉",
+    `Your ${frequency} dairy delivery plan is now active. First delivery tomorrow morning!`,
+  );
+}
+
 /** "Milk delivered today" style notification — used by Order Tracking demo. */
 export function notifyOrderDelivered(): Promise<void> {
   return sendLocalNotification(

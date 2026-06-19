@@ -6,9 +6,14 @@ import { SubscriptionFrequency, SubscriptionDuration } from "@/types";
 interface Props {
   selectedFreq: SubscriptionFrequency;
   selectedDuration: SubscriptionDuration;
+  productCount?: number;
 }
 
-const SubscriptionSummary = ({ selectedFreq, selectedDuration }: Props) => {
+const SubscriptionSummary = ({
+  selectedFreq,
+  selectedDuration,
+  productCount = 0,
+}: Props) => {
   return (
     <View style={styles.summaryCard}>
       <Text style={styles.summaryTitle}>Your Plan Summary</Text>
@@ -23,6 +28,15 @@ const SubscriptionSummary = ({ selectedFreq, selectedDuration }: Props) => {
       <View style={styles.summaryRow}>
         <Text style={styles.summaryKey}>Duration</Text>
         <Text style={styles.summaryVal}>{selectedDuration}</Text>
+      </View>
+
+      <View style={styles.divider} />
+
+      <View style={styles.summaryRow}>
+        <Text style={styles.summaryKey}>Products</Text>
+        <Text style={styles.summaryVal}>
+          {productCount} {productCount === 1 ? "item" : "items"}
+        </Text>
       </View>
 
       <View style={styles.divider} />

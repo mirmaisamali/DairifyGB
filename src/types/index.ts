@@ -3,9 +3,10 @@
 export type RootStackParamList = {
   Splash: undefined;
   Login: undefined;
-  Main: undefined;
+  Main: { screen?: keyof MainTabParamList } | undefined;
   OrderSuccess: { orderId: string };
   OrderTracking: { orderId?: string } | undefined;
+  ProductDetail: { productId: string };
 };
 
 export type MainTabParamList = {
@@ -46,9 +47,29 @@ export interface SubscriptionOption {
   savings: string;
 }
 
+export interface Subscription {
+  frequency: SubscriptionFrequency;
+  duration: SubscriptionDuration;
+  productIds: string[];
+  startDate: string; // ISO timestamp
+  active: boolean;
+}
+
+export interface UserPreferences {
+  deliveryAddress: string;
+}
+
 // ─── Order types ──────────────────────────────────────────────────────────────
 
-export type OrderStatus = "Pending" | "Delivered";
+/** @deprecated Legacy status — migrated to "Confirmed" on load. */
+export type LegacyOrderStatus = "Pending";
+
+export type OrderStatus =
+  | LegacyOrderStatus
+  | "Confirmed"
+  | "Packed"
+  | "OutForDelivery"
+  | "Delivered";
 
 export interface OrderItem {
   productId: string;
