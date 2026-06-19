@@ -2,20 +2,24 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { formatOrderDate, formatPrice } from "@/utils/format";
 import { Order } from "@/types";
 import StatusBadge from "./StatusBadge";
+import Button from "@/components/Button";
 import Colors from "@/constants/colors";
 import Spacing from "@/constants/spacing";
 
 interface IProps {
   order: Order;
   onPress: () => void;
+  onReorder?: () => void;
+  reordering?: boolean;
 }
 
-const OrderCard = ({ order, onPress }: IProps) => {
+const OrderCard = ({ order, onPress, onReorder, reordering }: IProps) => {
   const itemCount = order.items.reduce((sum, i) => sum + i.quantity, 0);
 
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.8}>
-      <View style={styles.cardHeader}>
+    <View style={styles.card}>
+      <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
+        <View style={styles.cardHeader}>
         <View>
           <Text style={styles.orderId}>Order #{order.id}</Text>
           <Text style={styles.orderDate}>{formatOrderDate(order.date)}</Text>
@@ -43,7 +47,19 @@ const OrderCard = ({ order, onPress }: IProps) => {
         <Text style={styles.totalLabel}>Total Amount</Text>
         <Text style={styles.totalVal}>{formatPrice(order.grandTotal)}</Text>
       </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+
+      {onReorder && (
+        <Button
+          label="Re-order 🔄"
+          onPress={onReorder}
+          variant="outline"
+          size="sm"
+          loading={reordering}
+          style={styles.reorderBtn}
+        />
+      )}
+    </View>
   );
 };
 
@@ -108,4 +124,5 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     color: Colors.primary,
   },
+  reorderBtn: { marginTop: Spacing.xs },
 });

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -8,7 +7,12 @@ import Colors from "@/constants/colors";
 import Spacing from "@/constants/spacing";
 import { RootStackParamList } from "@/types";
 import { useOrders } from "@/context/OrdersContext";
-import { notifyOrderDelivered } from "@/services/notificationService";
+import { notifyOrderStatusUpdate } from "@/services/notificationService";
+import {
+  getAdvanceStatusLabel,
+  normalizeOrderStatus,
+  orderStatusToStep,
+} from "@/utils/orderStatus";
 import MapPlaceholder from "./components/MapPlaceholder";
 import ProgressSteps from "./components/ProgressSteps";
 import DeliveryInfo from "./components/DeliveryInfo";
@@ -20,16 +24,20 @@ type Props = {
 
 const OrderTrackingScreen = ({ navigation, route }: Props) => {
   const orderId = route.params?.orderId;
-  const { orders, updateOrderStatus } = useOrders();
+  const { orders, advanceOrderStatus } = useOrders();
   const order = orders.find((o) => o.id === orderId);
 
-  const [delivered, setDelivered] = useState(order?.status === "Delivered");
-  const currentStep = delivered ? 4 : 3; // 3 = Out for delivery, 4 = Delivered
+  const status = normalizeOrderStatus(order?.status ?? "Confirmed");
+  const delivered = status === "Delivered";
+  const currentStep = orderStatusToStep(status);
+  const advanceLabel = order ? getAdvanceStatusLabel(order.status) : null;
 
-  const handleMarkDelivered = () => {
-    setDelivered(true);
-    if (orderId) updateOrderStatus(orderId, "Delivered");
-    notifyOrderDelivered();
+  const handleAdvanceStatus = () => {
+    if (!orderId) return;
+    const nextStatus = advanceOrderStatus(orderId);
+    if (nextStatus) {
+      notifyOrderStatusUpdate(orderId, nextStatus);
+    }
   };
 
   const deliveryAddress = order?.address ?? "Your registered address, Gilgit";
@@ -40,7 +48,6 @@ const OrderTrackingScreen = ({ navigation, route }: Props) => {
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
       >
-        {/* Header */}
         <View style={styles.header}>
           <Text style={styles.title}>Track Order</Text>
           <View
@@ -59,24 +66,21 @@ const OrderTrackingScreen = ({ navigation, route }: Props) => {
 
         {orderId && <Text style={styles.orderIdText}>Order #{orderId}</Text>}
 
-        {/* Map placeholder */}
         <MapPlaceholder delivered={delivered} />
 
-        {/* Progress Steps */}
         <ProgressSteps currentStep={currentStep} />
 
-        {/* Delivery info */}
         <DeliveryInfo
           delivered={delivered}
           order={order}
           deliveryAddress={deliveryAddress}
         />
 
-        {!delivered && (
+        {advanceLabel && (
           <Button
-            label="Mark as Delivered 📦"
-            onPress={handleMarkDelivered}
-            style={styles.markDeliveredBtn}
+            label={advanceLabel}
+            onPress={handleAdvanceStatus}
+            style={styles.advanceBtn}
           />
         )}
 
@@ -131,6 +135,6 @@ const styles = StyleSheet.create({
     color: Colors.textSecondary,
     marginBottom: Spacing.sm,
   },
-  markDeliveredBtn: { marginBottom: Spacing.sm },
+  advanceBtn: { marginBottom: Spacing.sm },
   backBtn: {},
 });

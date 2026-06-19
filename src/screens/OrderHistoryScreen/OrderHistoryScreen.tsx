@@ -3,10 +3,12 @@ import { View, Text, StyleSheet, FlatList, RefreshControl } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useOrders } from "@/context/OrdersContext";
+import { useCart } from "@/context/CartContext";
+import { getProductById } from "@/services/productService";
 import EmptyState from "@/components/EmptyState";
 import Colors from "@/constants/colors";
 import Spacing from "@/constants/spacing";
-import { RootStackParamList } from "@/types";
+import { Order, Product, RootStackParamList } from "@/types";
 import SkeletonBox from "@/components/SkeletonBox";
 import OrderCard from "./components/OrderCard";
 
@@ -16,12 +18,35 @@ type Props = {
 
 const OrderHistoryScreen = ({ navigation }: Props) => {
   const { orders, loading } = useOrders();
+  const { addItemsToCart } = useCart();
   const [refreshing, setRefreshing] = useState(false);
+  const [reorderingId, setReorderingId] = useState<string | null>(null);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => setRefreshing(false), 600);
   }, []);
+
+  const handleReorder = async (order: Order) => {
+    setReorderingId(order.id);
+    try {
+      const entries = (
+        await Promise.all(
+          order.items.map(async (item) => {
+            const product = await getProductById(item.productId);
+            return product ? { product, quantity: item.quantity } : null;
+          }),
+        )
+      ).filter(Boolean) as { product: Product; quantity: number }[];
+
+      if (entries.length > 0) {
+        addItemsToCart(entries);
+        navigation.navigate("Main", { screen: "Cart" });
+      }
+    } finally {
+      setReorderingId(null);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
@@ -61,6 +86,8 @@ const OrderHistoryScreen = ({ navigation }: Props) => {
               onPress={() =>
                 navigation.navigate("OrderTracking", { orderId: item.id })
               }
+              onReorder={() => handleReorder(item)}
+              reordering={reorderingId === item.id}
             />
           )}
           contentContainerStyle={styles.list}
@@ -116,73 +143,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
-  },
-  orderId: {
-    fontSize: Spacing.font.md,
-    fontWeight: "800",
-    color: Colors.textPrimary,
-  },
-  orderDate: {
-    fontSize: Spacing.font.xs,
-    color: Colors.textMuted,
-    marginTop: 2,
-  },
-  statusBadge: {
-    borderRadius: Spacing.radius.full,
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-  },
-  statusPending: {
-    backgroundColor: "#FEF3C7",
-    borderWidth: 1,
-    borderColor: "#F59E0B",
-  },
-  statusDelivered: {
-    backgroundColor: Colors.primaryLight,
-    borderWidth: 1,
-    borderColor: Colors.primary,
-  },
-  statusText: { fontSize: Spacing.font.xs, fontWeight: "700" },
-  statusTextPending: { color: "#B45309" },
-  statusTextDelivered: { color: Colors.primaryDark },
-  cardBodyColumn: {
-    flexDirection: "column",
-    gap: Spacing.xs,
-  },
-  itemRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: Spacing.sm,
-  },
-  itemEmoji: { fontSize: 20 },
-  itemName: {
-    flex: 1,
-    fontSize: Spacing.font.md,
-    color: Colors.textPrimary,
-  },
-  itemCount: {
-    fontSize: Spacing.font.sm,
-    color: Colors.textSecondary,
-    fontWeight: "500",
-  },
-  itemQty: {
-    fontSize: Spacing.font.sm,
-    color: Colors.textSecondary,
-    fontWeight: "700",
-    marginLeft: Spacing.sm,
-  },
-  cardFooter: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderTopWidth: 1,
-    borderTopColor: Colors.borderLight,
-    paddingTop: Spacing.sm,
-  },
-  totalLabel: { fontSize: Spacing.font.sm, color: Colors.textSecondary },
-  totalVal: {
-    fontSize: Spacing.font.lg,
-    fontWeight: "800",
-    color: Colors.primary,
   },
 });

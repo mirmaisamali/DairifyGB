@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useCart } from "@/context/CartContext";
 import { useOrders } from "@/context/OrdersContext";
+import { useUserPreferences } from "@/context/UserPreferencesContext";
 import { notifyOrderPlaced } from "@/services/notificationService";
 import { generateOrderId } from "@/utils/format";
 import Button from "@/components/Button";
@@ -34,8 +35,24 @@ const CartScreen = ({ navigation }: Props) => {
   } = useCart();
 
   const { addOrder } = useOrders();
+  const {
+    preferences,
+    loading: prefsLoading,
+    setDeliveryAddress,
+  } = useUserPreferences();
   const [address, setAddress] = useState("");
   const [payment, setPayment] = useState<PaymentMethod>("cod");
+
+  useEffect(() => {
+    if (!prefsLoading) {
+      setAddress(preferences.deliveryAddress);
+    }
+  }, [prefsLoading, preferences.deliveryAddress]);
+
+  const handleAddressChange = (value: string) => {
+    setAddress(value);
+    setDeliveryAddress(value);
+  };
 
   const deliveryFee = totalPrice > 500 ? 0 : 50;
   const grandTotal = totalPrice + deliveryFee;
@@ -112,7 +129,11 @@ const CartScreen = ({ navigation }: Props) => {
         />
 
         {/* Delivery Address */}
-        <DeliveryAddress address={address} setAddress={setAddress} />
+        <DeliveryAddress
+          address={address}
+          setAddress={handleAddressChange}
+          savedHint
+        />
 
         {/* Payment Method */}
         <PaymentMethod payment={payment} setPayment={setPayment} />

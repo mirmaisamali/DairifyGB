@@ -5,6 +5,7 @@ import SplashScreen from "@/screens/SplashScreen";
 import LoginScreen from "@/screens/LoginScreen";
 import OrderSuccessScreen from "@/screens/OrderSuccessScreen";
 import OrderTrackingScreen from "@/screens/OrderTrackingScreen";
+import ProductDetailScreen from "@/screens/ProductDetailScreen";
 import { RootStackParamList } from "@/types";
 import Colors from "@/constants/colors";
 
@@ -32,6 +33,8 @@ const AppNavigator = () => {
         />
 
         <Stack.Screen name="OrderTracking" component={OrderTrackingScreen} />
+
+        <Stack.Screen name="ProductDetail" component={ProductDetailScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

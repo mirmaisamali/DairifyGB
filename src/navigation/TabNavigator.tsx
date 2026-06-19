@@ -34,7 +34,7 @@ const TabNavigator = ({ navigation }: Props) => {
           ),
         }}
       >
-        {() => <ShopScreen />}
+        {() => <ShopScreen navigation={navigation} />}
       </Tab.Screen>
 
       <Tab.Screen
@@ -54,8 +54,9 @@ const TabNavigator = ({ navigation }: Props) => {
             <TabIcon emoji="❤️" label="Favorites" focused={focused} />
           ),
         }}
-        component={FavoritesScreen}
-      />
+      >
+        {() => <FavoritesScreen navigation={navigation} />}
+      </Tab.Screen>
 
       <Tab.Screen
         name="Cart"
